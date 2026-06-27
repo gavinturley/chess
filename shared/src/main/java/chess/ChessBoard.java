@@ -7,10 +7,9 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessBoard {
+    private String[][] _board = new String[8][8];
 
-    public ChessBoard() {
-        
-    }
+    public ChessBoard() {}
 
     /**
      * Adds a chess piece to the chessboard
