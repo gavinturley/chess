@@ -11,7 +11,7 @@ import java.util.Collection;
 public class ChessPiece {
     private PieceType _type;
     private ChessGame.TeamColor _color;
-
+    Collection<ChessMove> moves = new ArrayList<>();
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         _type = type;
@@ -52,6 +52,36 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        PieceType pieceType = getPieceType();
+        if (pieceType == PieceType.QUEEN){
+            return queenMoves(board, myPosition);
+        } else if (pieceType == PieceType.PAWN){
+            return pawnMoves(board, myPosition);
+        } else if (pieceType == PieceType.BISHOP){
+            return bishopMoves(board, myPosition);
+        } else if (pieceType == PieceType.KNIGHT){
+            return knightMoves(board, myPosition);
+        } else if (pieceType == PieceType.ROOK){
+            return rookMoves(board, myPostion);
+        } else if (pieceType == PieceType.KING){
+            return kingMoves(board, myPosition);
+        } else {
+            System.out.println("Chess piece not valid.");
+            return null;
+        }
+    }
+
+    public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
+    }
+    public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
+    }
+    public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
+    }
+    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+    }
+    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
+    }
+    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
     }
 }
+

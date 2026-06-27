@@ -7,7 +7,8 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    private String[][] _board = new String[8][8];
+    private ChessPiece[][] _board = new ChessPiece[8][8];
+    private const int MAX_BOARD_INDEX = 7;
 
     public ChessBoard() {}
 
@@ -18,7 +19,22 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+        _board[position.getRow()][position.getCol()] = piece;
+    }
+
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        if (!super.equals(object)) {
+            return false;
+        }
+        ChessBoard that = (ChessBoard) object;
+        return java.util.Objects.deepEquals(_board, that._board);
+    }
+
+    public int hashCode() {
+        return java.util.Objects.hash(super.hashCode(), java.util.Arrays.deepHashCode(_board));
     }
 
     /**
@@ -29,7 +45,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        return _board[position.getRow()][position.getCol()];
     }
 
     /**
@@ -37,6 +53,35 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        int rowIndex = 1;
+        foreach (ChessPiece[] row : _board){
+            if (rowIndex == 1 || rowIndex == 8)
+            {
+                int colIndex = 1;
+                foreach (ChessPiece cell : row){
+                    if (colIndex == 1 || colIndex == 8){
+                        cell = ChessPiece.PieceType.ROOK;
+                    } else if (colIndex == 2 || colIndex == 7){
+                        cell = ChessPiece.PieceType.KNIGHT;
+                    } else if (colIndex == 3 || colIndex == 6){
+                        cell = ChessPiece.PieceType.BISHOP;
+                    } else if (colIndex == 4){
+                        cell = ChessPiece.PieceType.KING;
+                    } else if (colIndex == 5){
+                        cell = ChessPiece.PieceType.QUEEN;
+                    }
+                    colIndex++;
+                }
+            } else if (rowIndex == 2 || rowIndex == 7){
+                foreach (ChessPiece cell : row){
+                    cell = ChessPiece.PieceType.PAWN;
+                }
+            } else {
+                foreach (ChessPiece cell : row){
+                    cell = null;
+                }
+            }
+            row++;
+        }
     }
 }
