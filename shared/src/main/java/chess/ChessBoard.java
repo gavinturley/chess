@@ -8,7 +8,7 @@ package chess;
  */
 public class ChessBoard {
     private ChessPiece[][] _board = new ChessPiece[8][8];
-    private const int MAX_BOARD_INDEX = 7;
+    private final int MAX_BOARD_INDEX = 7;
 
     public ChessBoard() {}
 
@@ -19,7 +19,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        _board[position.getRow()][position.getCol()] = piece;
+        _board[position.getRow()][position.getColumn()] = piece;
     }
 
     public boolean equals(Object object) {
@@ -45,7 +45,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return _board[position.getRow()][position.getCol()];
+        return _board[position.getRow()][position.getColumn()];
     }
 
     /**
@@ -53,35 +53,25 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        int rowIndex = 1;
-        foreach (ChessPiece[] row : _board){
-            if (rowIndex == 1 || rowIndex == 8)
-            {
-                int colIndex = 1;
-                foreach (ChessPiece cell : row){
-                    if (colIndex == 1 || colIndex == 8){
-                        cell = ChessPiece.PieceType.ROOK;
-                    } else if (colIndex == 2 || colIndex == 7){
-                        cell = ChessPiece.PieceType.KNIGHT;
-                    } else if (colIndex == 3 || colIndex == 6){
-                        cell = ChessPiece.PieceType.BISHOP;
-                    } else if (colIndex == 4){
-                        cell = ChessPiece.PieceType.KING;
-                    } else if (colIndex == 5){
-                        cell = ChessPiece.PieceType.QUEEN;
+            for (int rowIndex = 0; rowIndex < _board.length; rowIndex++){
+                for (int colIndex = 0; colIndex < _board[0].length; colIndex++){
+                    int row = rowIndex + 1;
+                    int col = colIndex + 1;
+
+                    ChessGame.TeamColor color = (row <= 2) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+                    if (row == 1 || row == 8){
+                        ChessPiece.PieceType type;
+                        if (col == 1 || col == 8) type = ChessPiece.PieceType.ROOK;
+                        else if (col == 2 || col == 7) type = ChessPiece.PieceType.KNIGHT;
+                        else if (col == 3 || col == 6) type = ChessPiece.PieceType.BISHOP;
+                        else if (col == 4) type = ChessPiece.PieceType.QUEEN;
+                        else type = ChessPiece.PieceType.KING;
+
+                        _board[rowIndex][colIndex] = new ChessPiece(color, type);
+                    } else if (row == 2 || row == 7){
+                        _board[rowIndex][colIndex] = new ChessPiece(color, ChessPiece.PieceType.PAWN);
                     }
-                    colIndex++;
                 }
-            } else if (rowIndex == 2 || rowIndex == 7){
-                foreach (ChessPiece cell : row){
-                    cell = ChessPiece.PieceType.PAWN;
-                }
-            } else {
-                foreach (ChessPiece cell : row){
-                    cell = null;
-                }
-            }
-            row++;
         }
     }
 }
