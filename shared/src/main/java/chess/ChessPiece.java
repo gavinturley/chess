@@ -88,7 +88,7 @@ public class ChessPiece {
                 if (tempCol > 8 || tempCol < 1) continue;
                 ChessPosition endPosition = new ChessPosition(myPosition.getRow() + row, myPosition.getColumn() + col);
                 if (endPosition == myPosition) continue;
-                if (ChessBoard.getPiece(temp) == null) {
+                if (board.getPiece(endPosition) == null || board.getPiece(endPosition).getTeamColor() != this.getTeamColor()) {
                     ChessMove move = new ChessMove(myPosition, endPosition, null);
                     moves.add(move);
                 }
@@ -105,19 +105,19 @@ public class ChessPiece {
         if (tempCol > 8) return moves;
 
         ChessPosition endPosition = new ChessPosition(tempRow, tempCol);
-        if (ChessBoard.getPiece(temp) == null) {
+        if (board.getPiece(endPosition) == null) {
             ChessMove move = new ChessMove(myPosition, endPosition, null);
             moves.add(move);
         }
 
         endPosition = new ChessPosition(tempRow - 1, tempCol);
-        if (ChessBoard.getPiece(temp) != null){
+        if (board.getPiece(endPosition) == null && board.getPiece(endPosition).getTeamColor() != this.getTeamColor()) {
             ChessMove move = new ChessMove(myPosition, endPosition, null);
             moves.add(move);
         }
 
         endPosition = new ChessPosition(tempRow + 1, tempCol);
-        if (ChessBoard.getPiece(temp) != null){
+        if (board.getPiece(endPosition) == null && board.getPiece(endPosition).getTeamColor() != this.getTeamColor()) {
             ChessMove move = new ChessMove(myPosition, endPosition, null);
             moves.add(move);
         }
@@ -126,16 +126,16 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
-        Collections<ChessMove> moves = new ArrayList<>();
+        Collection<ChessMove> moves = new ArrayList<>();
         int[] multiplier = {1, -1};
         for (int i = 0; i < 2; i++){
             for (int j = 0; j < 8; j++){
-                int tempRow = myPosition.getRow * multiplier[i];
-                int tempCol = myPosition.getColumn;
+                int tempRow = myPosition.getRow() * multiplier[i];
+                int tempCol = myPosition.getColumn();
 
                 if (tempRow > 8 || tempRow < 1) break;
                 ChessPosition endPosition = new ChessPosition(tempRow + j, tempCol);
-                if (board.getPiece(endPosition) == null) {
+                if (board.getPiece(endPosition) == null || board.getPiece(endPosition).getTeamColor() != this.getTeamColor()) {
                     ChessMove move = new ChessMove(myPosition, endPosition, null);
                     moves.add(move);
                 } else {
@@ -146,12 +146,12 @@ public class ChessPiece {
 
         for (int i = 0; i < 2; i++){
             for (int j = 0; j < 8; j++){
-                int tempRow = myPosition.getRow;
-                int tempCol = myPosition.getColumn * multiplier[i];
+                int tempRow = myPosition.getRow();
+                int tempCol = myPosition.getColumn() * multiplier[i];
 
                 if (tempCol > 8 || tempCol < 1) break;
                 ChessPosition endPosition = new ChessPosition(tempRow, tempCol + j);
-                if (board.getPiece(endPosition) == null) {
+                if (board.getPiece(endPosition) == null || board.getPiece(endPosition).getTeamColor() != this.getTeamColor()) {
                     ChessMove move = new ChessMove(myPosition, endPosition, null);
                     moves.add(move);
                 } else {
@@ -169,14 +169,14 @@ public class ChessPiece {
         int[] dy = {-1, 1, -2, 2, 2, -2, -1, 1};
 
         for (int i = 0; i < 8; i++){
-            int tempRow = myPosition.getRow + dx[i];
-            int tempCol = myPosition.getCol + dy[i];
+            int tempRow = myPosition.getRow() + dx[i];
+            int tempCol = myPosition.getColumn() + dy[i];
 
             if (tempRow > 8 || tempRow < 1) continue;
             if (tempCol > 8 || tempCol < 1) continue;
 
             ChessPosition endPosition = new ChessPosition(tempRow, tempCol);
-            if (board.getPiece(endPosition) == null) {
+            if (board.getPiece(endPosition) == null || board.getPiece(endPosition).getTeamColor() != this.getTeamColor()) {
                 ChessMove move = new ChessMove(myPosition, endPosition, null);
                 moves.add(move);
             }
@@ -186,7 +186,7 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMoves> moves = new ArrayList<>();
+        Collection<ChessMove> moves = new ArrayList<>();
         int[] multiplier = {1, -1};
 
         for (int i = 0; i < 2; i++){
@@ -196,13 +196,13 @@ public class ChessPiece {
 
                 for (int k = 0; k < 8; k++){
                     int tempRow = (myPosition.getRow() + k) * rowMult;
-                    int tempCol = (myPosition.getCol() + k) * colMult;
+                    int tempCol = (myPosition.getColumn() + k) * colMult;
 
                     if (tempRow > 8 || tempRow < 1) continue;
                     if (tempCol > 8 || tempCol < 1) continue;
 
-                    ChessPosition endPosition = new ChessPostion(tempRow, tempCol);
-                    if (board.getPiece(endPosition) == null){
+                    ChessPosition endPosition = new ChessPosition(tempRow, tempCol);
+                    if (board.getPiece(endPosition) == null || board.getPiece(endPosition).getTeamColor() != this.getTeamColor()) {
                         ChessMove move = new ChessMove(myPosition, endPosition, null);
                         moves.add(move);
                     } else {
