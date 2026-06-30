@@ -1,5 +1,6 @@
 package chess;
 
+//done
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -7,10 +8,11 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    private ChessPiece[][] _board = new ChessPiece[8][8];
-    private final int MAX_BOARD_INDEX = 7;
+    private ChessPiece[][] _board;
 
-    public ChessBoard() {}
+    public ChessBoard() {
+        _board = new ChessPiece[8][8];
+    }
 
     /**
      * Adds a chess piece to the chessboard

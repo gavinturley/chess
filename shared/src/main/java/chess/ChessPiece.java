@@ -3,6 +3,7 @@ package chess;
 import java.util.Collection;
 import java.util.ArrayList;
 
+//done
 /**
  * Represents a single chess piece
  * <p>
