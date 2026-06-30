@@ -22,21 +22,6 @@ public class ChessBoard {
         _board[position.getRow()][position.getColumn()] = piece;
     }
 
-    public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
-        if (!super.equals(object)) {
-            return false;
-        }
-        ChessBoard that = (ChessBoard) object;
-        return java.util.Objects.deepEquals(_board, that._board);
-    }
-
-    public int hashCode() {
-        return java.util.Objects.hash(super.hashCode(), java.util.Arrays.deepHashCode(_board));
-    }
-
     /**
      * Gets a chess piece on the chessboard
      *
