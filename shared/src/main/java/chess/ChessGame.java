@@ -69,12 +69,14 @@ public class ChessGame {
             throw new InvalidMoveException("Illegal move");
         }
 
-        ChessPiece pieceToPlace = move.getPromotionPiece();
-        if (pieceToPlace != null){
-            pieceToPlace = new ChessPiece(piece.getTeamColor(), move.getPromotionPiece());
+        ChessPiece.PieceType promotionType = move.getPromotionPiece();
+        ChessPiece pieceToPlace;
+        if (promotionType != null) {
+            pieceToPlace = new ChessPiece(piece.getTeamColor(), promotionType);
         } else {
             pieceToPlace = piece;
         }
+
         currentBoard.addPiece(move.getEndPosition(), pieceToPlace);
         currentBoard.addPiece(move.getStartPosition(), null);
 
@@ -84,13 +86,14 @@ public class ChessGame {
     private ChessPosition findKing(ChessGame.TeamColor teamColor){
         for (int row = 0; row < 8; row++){
             for (int col = 0; col < 8; col++){
-                ChessPosition tile = new ChessPosition(i, j);
+                ChessPosition tile = new ChessPosition(row, col);
                 ChessPiece piece = getBoard().getPiece(tile);
                 if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == teamColor){
                     return tile;
                 }
             }
         }
+        return null;
     }
 
     /**
@@ -104,9 +107,9 @@ public class ChessGame {
         for (int row = 0; row < 8; row++){
             for (int col = 0; col < 8; col++){
                 ChessPosition position = new ChessPosition(row, col);
-                ChessPiece piece = currentBoard.getPiece(pos);
-                if (piece != null && piece.getTeamColor != teamColor){
-                    for (ChessMove move : piece.pieceMoves(currentBoard, pos)){
+                ChessPiece piece = currentBoard.getPiece(position);
+                if (piece != null && piece.getTeamColor() != teamColor){
+                    for (ChessMove move : piece.pieceMoves(currentBoard, position)){
                         if (move.getEndPosition().equals(kingPosition)){
                             return true;
                         }
@@ -117,17 +120,41 @@ public class ChessGame {
         return false;
     }
 
-    private boolean leavesKingInCheck(ChessMove move, ChessGame.TeamColor teamColor){
-//needs implementation
+    private boolean leavesKingInCheck(ChessMove move, ChessGame.TeamColor teamColor) {
+        // if move is made and king of same color is then in check, return true
+        ChessBoard boardAfterMove = getBoard();
+        Collection<ChessMove> legalMoves = validMoves(move.getStartPosition());
+        if (legalMoves == null || !legalMoves.contains(move)) {
+            return false;
+        }
+
+        boardAfterMove.addPiece(move.getStartPosition(), null);
+
+        ChessPosition kingPosition = findKing(teamColor);
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                ChessPosition position = new ChessPosition(row, col);
+                ChessPiece piece = boardAfterMove.getPiece(position);
+                if (piece != null && piece.getTeamColor() != teamColor) {
+                    for (ChessMove chessMove : piece.pieceMoves(currentBoard, position)) {
+                        if (chessMove.getEndPosition().equals(kingPosition)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     private boolean hasNoLegalMoves(TeamColor teamColor){
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 ChessPosition position = new ChessPosition(row, col);
-                ChessPiece piece = currentBoard.getPiece(pos);
+                ChessPiece piece = currentBoard.getPiece(position);
                 if (piece != null && piece.getTeamColor() == teamColor) {
-                    for (ChessMove move : piece.pieceMoves(currentBoard, pos)) {
+                    for (ChessMove move : piece.pieceMoves(currentBoard, position)) {
                         if (!leavesKingInCheck(move, teamColor)) {
                             return false;
                         }
