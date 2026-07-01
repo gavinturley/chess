@@ -83,12 +83,12 @@ public class ChessPiece {
 
         for (int row = -1; row < 2; row++){
             for (int col = -1; col < 2; col++){
+                if (row == 0 && col == 0) continue;
                 int tempRow = myPosition.getRow() + row;
                 int tempCol = myPosition.getColumn() + col;
                 if (tempRow > 8 || tempRow < 1) continue;
                 if (tempCol > 8 || tempCol < 1) continue;
                 ChessPosition endPosition = new ChessPosition(myPosition.getRow() + row, myPosition.getColumn() + col);
-                if (endPosition == myPosition) continue;
                 if (board.getPiece(endPosition) == null || board.getPiece(endPosition).getTeamColor() != this.getTeamColor()) {
                     ChessMove move = new ChessMove(myPosition, endPosition, null);
                     moves.add(move);

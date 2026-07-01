@@ -8,10 +8,10 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    private ChessPiece[][] _board;
+    private ChessPiece[][] board;
 
     public ChessBoard() {
-        _board = new ChessPiece[8][8];
+        board = new ChessPiece[8][8];
     }
 
     /**
@@ -21,7 +21,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        _board[position.getRow()][position.getColumn()] = piece;
+        board[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
     /**
@@ -32,33 +32,49 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return _board[position.getRow()][position.getColumn()];
+        return board[position.getRow() - 1][position.getColumn() - 1];
     }
+
+
 
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-            for (int rowIndex = 0; rowIndex < _board.length; rowIndex++){
-                for (int colIndex = 0; colIndex < _board[0].length; colIndex++){
-                    int row = rowIndex + 1;
-                    int col = colIndex + 1;
+        for (int rowIndex = 0; rowIndex < board.length; rowIndex++){
+            for (int colIndex = 0; colIndex < board[0].length; colIndex++){
+                int row = rowIndex + 1;
+                int col = colIndex + 1;
 
-                    ChessGame.TeamColor color = (row <= 2) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
-                    if (row == 1 || row == 8){
-                        ChessPiece.PieceType type;
-                        if (col == 1 || col == 8) type = ChessPiece.PieceType.ROOK;
-                        else if (col == 2 || col == 7) type = ChessPiece.PieceType.KNIGHT;
-                        else if (col == 3 || col == 6) type = ChessPiece.PieceType.BISHOP;
-                        else if (col == 4) type = ChessPiece.PieceType.QUEEN;
-                        else type = ChessPiece.PieceType.KING;
+                ChessGame.TeamColor color = (row <= 2) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+                if (row == 1 || row == 8){
+                    ChessPiece.PieceType type;
+                    if (col == 1 || col == 8) type = ChessPiece.PieceType.ROOK;
+                    else if (col == 2 || col == 7) type = ChessPiece.PieceType.KNIGHT;
+                    else if (col == 3 || col == 6) type = ChessPiece.PieceType.BISHOP;
+                    else if (col == 4) type = ChessPiece.PieceType.QUEEN;
+                    else type = ChessPiece.PieceType.KING;
 
-                        _board[rowIndex][colIndex] = new ChessPiece(color, type);
-                    } else if (row == 2 || row == 7){
-                        _board[rowIndex][colIndex] = new ChessPiece(color, ChessPiece.PieceType.PAWN);
-                    }
+                    board[rowIndex][colIndex] = new ChessPiece(color, type);
+                } else if (row == 2 || row == 7){
+                    board[rowIndex][colIndex] = new ChessPiece(color, ChessPiece.PieceType.PAWN);
                 }
+            }
         }
+    }
+
+    public ChessBoard copy() {
+        ChessBoard newBoard = new ChessBoard();
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                ChessPosition pos = new ChessPosition(row, col);
+                ChessPiece piece = this.getPiece(pos);
+                if (piece != null) {
+                    newBoard.addPiece(pos, new ChessPiece(piece.getTeamColor(), piece.getPieceType()));
+                }
+            }
+        }
+        return newBoard;
     }
 }
