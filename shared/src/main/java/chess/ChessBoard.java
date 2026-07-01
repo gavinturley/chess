@@ -1,4 +1,5 @@
 package chess;
+import java.util.Objects;
 
 //done
 /**
@@ -35,13 +36,48 @@ public class ChessBoard {
         return board[position.getRow() - 1][position.getColumn() - 1];
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessBoard that = (ChessBoard) o;
 
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                ChessPiece a = this.board[row][col];
+                ChessPiece b = that.board[row][col];
+                if (a == null && b == null) continue;
+                if (a == null || b == null) return false;
+                if (!a.equals(b)) return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                ChessPiece piece = board[row][col];
+                int pieceHash = (piece == null) ? 0 : piece.hashCode();
+                result = 31 * result + pieceHash;
+            }
+        }
+        return result;
+    }
 
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
+        for (int row = 0; row < 8; row++){
+            for (int col = 0; col < 8; col++){
+                board[row][col] = null;
+            }
+        }
+
         for (int rowIndex = 0; rowIndex < board.length; rowIndex++){
             for (int colIndex = 0; colIndex < board[0].length; colIndex++){
                 int row = rowIndex + 1;

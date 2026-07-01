@@ -1,5 +1,5 @@
 package chess;
-
+import java.util.Objects;
 import java.util.Collection;
 import java.util.ArrayList;
 
@@ -11,12 +11,12 @@ import java.util.ArrayList;
  * signature of the existing methods.
  */
 public class ChessPiece {
-    private final PieceType type;
-    private final ChessGame.TeamColor color;
+    private PieceType pieceType;
+    private ChessGame.TeamColor pieceColor;
 
-    public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
-        this.type = type;
-        this.color = pieceColor;
+    public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType pieceType) {
+        this.pieceType = pieceType;
+        this.pieceColor = pieceColor;
     }
 
     /**
@@ -35,14 +35,14 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        return this.color;
+        return this.pieceColor;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        return this.type;
+        return this.pieceType;
     }
 
     /**
@@ -215,6 +215,18 @@ public class ChessPiece {
         }
 
         return moves;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessPiece other)) return false;
+        return this.pieceColor == other.pieceColor && this.pieceType == other.pieceType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, pieceType);
     }
 }
 
