@@ -208,17 +208,16 @@ public class ChessGame {
         return this.gameBoard;
     }
 
+    @Override
     public boolean equals(Object object) {
         if (object == null || getClass() != object.getClass()) {
             return false;
         }
-        if (!super.equals(object)) {
-            return false;
-        }
         ChessGame chessGame = (ChessGame) object;
-        return java.util.Objects.equals(gameBoard, chessGame.gameBoard) && teamTurn == chessGame.teamTurn;
+        return Objects.equals(gameBoard, chessGame.gameBoard) && teamTurn == chessGame.teamTurn;
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(gameBoard, teamTurn);
     }
