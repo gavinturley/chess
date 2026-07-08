@@ -15,7 +15,6 @@ public class ChessBoard {
 
     public ChessBoard() {
         chessBoard = new ChessPiece[8][8];
-        resetBoard();
     }
 
     /**
@@ -57,7 +56,7 @@ public class ChessBoard {
         ChessBoard newBoard = new ChessBoard();
         for (int row = 0; row < 8; row++){
             for (int col = 0; col < 8; col++){
-                ChessPosition position = new ChessPosition(row, col);
+                ChessPosition position = new ChessPosition(row + 1, col + 1);
                 newBoard.addPiece(position, chessBoard[row][col]);
             }
         }
