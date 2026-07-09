@@ -126,19 +126,30 @@ public class ChessPiece {
             }
         }
 
-//        moves.add(checkEnPassant(board, myPosition));
+        ChessMove enPassantMove = checkEnPassant(board, myPosition);
+        if (enPassantMove != null){
+            moves.add(enPassantMove);
+        }
 
         return moves;
     }
 
-//    private ChessMove checkEnPassant(ChessBoard board, ChessPosition myPosition){
-//        int myCorrectPosition;
-//        int theirCorrectPosition;
-//        if (board.getPiece(myPosition).getTeamColor().equals(ChessGame.TeamColor.BLACK)){
-//
-//        }
-//        if (myPosition.getRow().equals())
-//    }
+    private ChessMove checkEnPassant(ChessBoard board, ChessPosition myPosition){
+        ChessPosition target = board.getEnPassantTarget();
+        if (target == null) return null;
+
+        ChessGame.TeamColor teamColor = board.getPiece(myPosition).getTeamColor();
+        int direction = (teamColor == ChessGame.TeamColor.BLACK) ? -1 : 1;
+
+        int dx = target.getRow() - myPosition.getRow();
+        int dy = target.getColumn() - myPosition.getColumn();
+
+        if (dx == direction && Math.abs(dy) == 1){
+            return new ChessMove(myPosition, target, null);
+        }
+
+        return null;
+    }
 
     private Collection<ChessMove> addPawnMove(ChessBoard board, ChessPosition myPosition, ChessPosition endPosition, ChessGame.TeamColor pawnColor){
         int promotionRow = ChessGame.TeamColor.BLACK == pawnColor ? 1 : 8;
