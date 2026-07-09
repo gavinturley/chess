@@ -13,14 +13,14 @@ import java.util.Objects;
 public class ChessBoard {
     private final ChessPiece[][] chessBoard;
     private ChessPosition enPassantTarget;
-    private boolean blackCastlingPossible;
-    private boolean whiteCastlingPossible;
+    private boolean whiteKingSideCastle = true;
+    private boolean whiteQueenSideCastle = true;
+    private boolean blackKingSideCastle = true;
+    private boolean blackQueenSideCastle = true;
 
     public ChessBoard() {
         chessBoard = new ChessPiece[8][8];
         this.enPassantTarget = null;
-        this.blackCastlingPossible = true;
-        this.whiteCastlingPossible = true;
     }
 
     /**
@@ -52,20 +52,36 @@ public class ChessBoard {
         this.enPassantTarget = target;
     }
 
-    public boolean getBlackCastlingPossible(){
-        return blackCastlingPossible;
+    public boolean isWhiteKingSideCastle() {
+        return whiteKingSideCastle;
     }
 
-    public boolean getWhiteCastlingPossible(){
-        return whiteCastlingPossible;
+    public void setWhiteKingSideCastle(boolean whiteKingSideCastle) {
+        this.whiteKingSideCastle = whiteKingSideCastle;
     }
 
-    public void setBlackCastlingPossible(boolean possible){
-        this.blackCastlingPossible = possible;
+    public boolean isWhiteQueenSideCastle() {
+        return whiteQueenSideCastle;
     }
 
-    public void setWhiteCastlingPossible(boolean possible){
-        this.whiteCastlingPossible = possible;
+    public void setWhiteQueenSideCastle(boolean whiteQueenSideCastle) {
+        this.whiteQueenSideCastle = whiteQueenSideCastle;
+    }
+
+    public boolean isBlackKingSideCastle() {
+        return blackKingSideCastle;
+    }
+
+    public void setBlackKingSideCastle(boolean blackKingSideCastle) {
+        this.blackKingSideCastle = blackKingSideCastle;
+    }
+
+    public boolean isBlackQueenSideCastle() {
+        return blackQueenSideCastle;
+    }
+
+    public void setBlackQueenSideCastle(boolean blackQueenSideCastle) {
+        this.blackQueenSideCastle = blackQueenSideCastle;
     }
 
     @Override
@@ -91,8 +107,10 @@ public class ChessBoard {
             }
         }
         newBoard.setEnPassantTarget(this.enPassantTarget);
-        newBoard.setBlackCastlingPossible(this.blackCastlingPossible);
-        newBoard.setWhiteCastlingPossible(this.whiteCastlingPossible);
+        newBoard.setBlackKingSideCastle(this.blackKingSideCastle);
+        newBoard.setBlackQueenSideCastle(this.blackQueenSideCastle);
+        newBoard.setWhiteKingSideCastle(this.whiteKingSideCastle);
+        newBoard.setWhiteQueenSideCastle(this.whiteQueenSideCastle);
 
         return newBoard;
     }
@@ -128,7 +146,9 @@ public class ChessBoard {
         }
 
         this.enPassantTarget = null;
-        this.whiteCastlingPossible = true;
-        this.blackCastlingPossible = true;
+        this.blackKingSideCastle = true;
+        this.blackQueenSideCastle = true;
+        this.whiteKingSideCastle = true;
+        this.whiteQueenSideCastle = true;
     }
 }
