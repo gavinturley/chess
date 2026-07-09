@@ -126,8 +126,19 @@ public class ChessPiece {
             }
         }
 
+//        moves.add(checkEnPassant(board, myPosition));
+
         return moves;
     }
+
+//    private ChessMove checkEnPassant(ChessBoard board, ChessPosition myPosition){
+//        int myCorrectPosition;
+//        int theirCorrectPosition;
+//        if (board.getPiece(myPosition).getTeamColor().equals(ChessGame.TeamColor.BLACK)){
+//
+//        }
+//        if (myPosition.getRow().equals())
+//    }
 
     private Collection<ChessMove> addPawnMove(ChessBoard board, ChessPosition myPosition, ChessPosition endPosition, ChessGame.TeamColor pawnColor){
         int promotionRow = ChessGame.TeamColor.BLACK == pawnColor ? 1 : 8;

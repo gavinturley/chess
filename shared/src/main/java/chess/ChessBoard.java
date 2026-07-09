@@ -12,9 +12,15 @@ import java.util.Objects;
  */
 public class ChessBoard {
     private final ChessPiece[][] chessBoard;
+    private ChessPosition enPassantTarget;
+    private boolean blackCastlingPossible;
+    private boolean whiteCastlingPossible;
 
     public ChessBoard() {
         chessBoard = new ChessPiece[8][8];
+        this.enPassantTarget = null;
+        this.blackCastlingPossible = true;
+        this.whiteCastlingPossible = true;
     }
 
     /**
@@ -36,6 +42,30 @@ public class ChessBoard {
      */
     public ChessPiece getPiece(ChessPosition position) {
         return chessBoard[position.getRow() - 1][position.getColumn() - 1];
+    }
+
+    public ChessPosition getEnPassantTarget() {
+        return enPassantTarget;
+    }
+
+    public void setEnPassantTarget(ChessPosition target){
+        this.enPassantTarget = target;
+    }
+
+    public boolean getBlackCastlingPossible(){
+        return blackCastlingPossible;
+    }
+
+    public boolean getWhiteCastlingPossible(){
+        return whiteCastlingPossible;
+    }
+
+    public void setBlackCastlingPossible(boolean possible){
+        this.blackCastlingPossible = possible;
+    }
+
+    public void setWhiteCastlingPossible(boolean possible){
+        this.whiteCastlingPossible = possible;
     }
 
     @Override
@@ -60,6 +90,10 @@ public class ChessBoard {
                 newBoard.addPiece(position, chessBoard[row][col]);
             }
         }
+        newBoard.setEnPassantTarget(this.enPassantTarget);
+        newBoard.setBlackCastlingPossible(this.blackCastlingPossible);
+        newBoard.setWhiteCastlingPossible(this.whiteCastlingPossible);
+
         return newBoard;
     }
 
@@ -92,5 +126,9 @@ public class ChessBoard {
                 }
             }
         }
+
+        this.enPassantTarget = null;
+        this.whiteCastlingPossible = true;
+        this.blackCastlingPossible = true;
     }
 }
