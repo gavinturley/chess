@@ -113,6 +113,26 @@ public class ChessGame {
         setTeamTurn(teamTurn == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE);
     }
 
+    private void updateCastlingAllowance(ChessMove move, ChessPiece movingPiece){
+        ChessPosition start = move.getStartPosition();
+        if (movingPiece.getPieceType() == ChessPiece.PieceType.KING){
+            if (movingPiece.getTeamColor() == TeamColor.WHITE){
+                gameBoard.setWhiteKingSideCastle(false);
+                gameBoard.setWhiteQueenSideCastle(false);
+            } else {
+                gameBoard.setBlackKingSideCastle(false);
+                gameBoard.setBlackQueenSideCastle(false);
+            }
+        }
+
+        if (movingPiece.getPieceType() == ChessPiece.PieceType.ROOK) {
+            if (start.equals(new ChessPosition(1, 1))) gameBoard.setWhiteQueenSideCastle(false);
+            if (start.equals(new ChessPosition(1, 8))) gameBoard.setWhiteKingSideCastle(false);
+            if (start.equals(new ChessPosition(8, 1))) gameBoard.setBlackQueenSideCastle(false);
+            if (start.equals(new ChessPosition(8, 8))) gameBoard.setBlackKingSideCastle(false);
+        }
+    }
+
     /**
      * Determines if the given team is in check
      *
