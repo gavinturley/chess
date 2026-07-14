@@ -10,4 +10,5 @@ out/
 .DS_Store
 
 ### Chess project ###
-server/**/db.properties
+server/**/db.properties.DS_Store
+.idea/
