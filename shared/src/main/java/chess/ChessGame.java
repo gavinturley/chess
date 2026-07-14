@@ -99,6 +99,8 @@ public class ChessGame {
         ChessGame.TeamColor pieceColor = gameBoard.getPiece(move.getStartPosition()).getTeamColor();
         if (teamTurn != pieceColor) throw new InvalidMoveException("Not your turn");
 
+        updateCastlingAllowance(move, gameBoard.getPiece(move.getStartPosition()));
+
         ChessBoard newBoard = gameBoard.copy();
         if (move.getPromotionPiece() == null){
             newBoard.addPiece(move.getStartPosition(), null);
