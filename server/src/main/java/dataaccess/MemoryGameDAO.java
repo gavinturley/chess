@@ -13,7 +13,7 @@ public class MemoryGameDAO implements GameDAO{
     @Override
     public int createGame(GameData game){
         int id = nextID.getAndIncrement();
-        GameData withID = new GameData(id, game.whiteUsername(), game.blackUsername(), game.game());
+        GameData withID = game.withGameID(id);
 
         games.put(id, withID);
         return id;

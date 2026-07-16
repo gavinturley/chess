@@ -60,12 +60,6 @@ public class Server {
         }
     }
 
-//  import java.util.UUID;
-//
-//    public static String generateToken() {
-//        return UUID.randomUUID().toString();
-//    }
-
     public int run(int desiredPort) {
         javalin.start(desiredPort);
         return javalin.port();

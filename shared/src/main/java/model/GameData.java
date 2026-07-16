@@ -2,8 +2,16 @@ package model;
 
 import chess.ChessGame;
 
-public record GameData(int gameID, String whiteUsername, String blackUsername, ChessGame game) {
-    GameData rename(int gameID) {
-        return new GameData((gameID), whiteUsername, blackUsername, game);
+public record GameData(int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game) {
+    public GameData withGameID(int gameID) {
+        return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
+    }
+
+    public GameData withWhiteUsername(String whiteUsername) {
+        return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
+    }
+
+    public GameData withBlackUsername(String blackUsername) {
+        return new GameData(gameID, whiteUsername, blackUsername, gameName, game);
     }
 }
