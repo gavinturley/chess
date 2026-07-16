@@ -3,6 +3,7 @@ package service;
 import dataaccess.*;
 import model.UserData;
 import model.AuthData;
+import server.AuthResult;
 import server.RegisterRequest;
 
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class UserService {
         return createAuth(user.username());
     }
 
-    public authResult login(RegisterRequest request) throws DataAccessException {
+    public AuthResult login(RegisterRequest request) throws DataAccessException {
         if (isBlank(request.username()) || isBlank(request.password()) || isBlank(request.email())){
             throw new BadRequestException("Error: bad request");
         }
@@ -43,7 +44,34 @@ public class UserService {
         return createAuth(user.username());
     }
 
-    public static String generateToken() {
+    public void logout(String authToken) throws DataAccessException {
+        var auth = requireAuth(authToken);
+        authDAO.deleteAuth(auth.authToken());
+    }
+
+    private AuthResult createAuth(String username) throws DataAccessException {
+        String authToken = generateToken();
+        var auth = new AuthData(authToken, username);
+        authDAO.createAuth(auth);
+        return new AuthResult(auth.username(), auth.authToken());
+    }
+
+    private AuthData requireAuth(String authToken) throws DataAccessException {
+        if (authToken == null){
+            throw new UnauthorizedException("Error: unauthorized");
+        }
+        var auth = authDAO.getAuth(authToken);
+        if (auth == null){
+            throw new UnauthorizedException("Error: unauthorized");
+        }
+        return auth;
+    }
+
+    private static boolean isBlank(String string) {
+        return string == null || string.isBlank();
+    }
+
+    private static String generateToken() {
         return UUID.randomUUID().toString();
     }
 }
