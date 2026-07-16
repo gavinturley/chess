@@ -1,4 +1,4 @@
-package dataaccess;
+package dataAccess;
 
 import model.AuthData;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ public class MemoryAuthDAO implements AuthDAO{
 
     @Override
     public void createAuth(AuthData auth){
-        auths.put(auth.AuthToken(), auth);
+        auths.put(auth.authToken(), auth);
     }
 
     @Override

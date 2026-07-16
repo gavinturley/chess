@@ -1,4 +1,4 @@
-package dataaccess;
+package dataAccess;
 
 import model.UserData;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ public class MemoryUserDAO implements UserDAO{
 
     @Override
     public void createUser(UserData user){
-        users.put(user.username, user);
+        users.put(user.username(), user);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package dataaccess;
+package dataAccess;
 
 import model.GameData;
 import java.util.Collection;
@@ -13,7 +13,7 @@ public class MemoryGameDAO implements GameDAO{
     @Override
     public int createGame(GameData game){
         int id = nextID.getAndIncrement();
-        GameData withID = new GameData(id, game.whiteUsername(), game.blackUsername(), game.gameName(), game.game());
+        GameData withID = new GameData(id, game.whiteUsername(), game.blackUsername(), game.game());
 
         games.put(id, withID);
         return id;

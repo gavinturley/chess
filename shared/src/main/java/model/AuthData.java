@@ -1,9 +1,7 @@
 package model;
 
-public class AuthData {
-    public record AuthDataRecord(string authToken, string username) {
-        AuthDataRecord rename(string authToken) {
-            return new AuthDataRecord(authToken, username);
-        }
+public record AuthData(String authToken, String username) {
+    AuthData rename(String authToken) {
+        return new AuthData(authToken, username);
     }
 }
