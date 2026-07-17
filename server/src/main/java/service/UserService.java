@@ -4,6 +4,7 @@ import dataaccess.*;
 import model.UserData;
 import model.AuthData;
 import server.AuthResult;
+import server.LoginRequest;
 import server.RegisterRequest;
 
 import java.util.UUID;
@@ -31,8 +32,8 @@ public class UserService {
         return createAuth(user.username());
     }
 
-    public AuthResult login(RegisterRequest request) throws DataAccessException {
-        if (isBlank(request.username()) || isBlank(request.password()) || isBlank(request.email())){
+    public AuthResult login(LoginRequest request) throws DataAccessException {
+        if (isBlank(request.username()) || isBlank(request.password())){
             throw new BadRequestException("Error: bad request");
         }
 

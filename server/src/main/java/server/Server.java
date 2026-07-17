@@ -1,7 +1,7 @@
 package server;
 
 import dataaccess.*;
-import service.ClearService;
+import service.*;
 import io.javalin.*;
 import io.javalin.http.Context;
 import com.google.gson.Gson;
@@ -9,9 +9,12 @@ import com.google.gson.Gson;
 import java.util.Map;
 
 public class Server {
-
     private final Javalin javalin;
+    private final Gson gson = new Gson();
+
     private final ClearService clearService;
+    private final GameService gameService;
+    private final UserService userService;
 
     public Server() {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
@@ -21,43 +24,117 @@ public class Server {
         var authDAO = new MemoryAuthDAO();
 
         clearService = new ClearService(gameDAO, userDAO, authDAO);
+        gameService = new GameService(gameDAO, authDAO);
+        userService = new UserService(userDAO, authDAO);
 
         javalin.post("/user", this::register);
-//        javalin.post("/session", this::login);
-//        javalin.post("/session", this::logout);
-//        javalin.get("/game", this::listGames);
-//        javalin.post("/game", this::createGame);
-//        javalin.put("/game", this::joinGame);
+        javalin.post("/session", this::login);
+        javalin.post("/session", this::logout);
+        javalin.get("/game", this::listGames);
+        javalin.post("/game", this::createGame);
+        javalin.put("/game", this::joinGame);
         javalin.delete("/db", this::clear);
+
+        javalin.exception(Exception.class, (e, ctx) -> sendBody(ctx, 500, Map.of("message", "Error: " + e.getMessage())));
     }
 
-    private void register(Context ctx){
+    private void joinGame(Context ctx) {
         try {
-            registerService.register(ctx.body());
-            ctx.status(200);
-            ctx.result("{}");
-        } catch (DataAccessException e){
-            ctx.status(500);
-            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
-        } catch (BadRequestException e){
-            ctx.status(500);
-            ctx.result(new Gson().toJson(Map.of("message", "Error: bad request");
-        } catch (AlreadyTakenException e){
-            ctx.status(500);
-            ctx.result(new Gson().toJson(Map.of("message", "Error: already taken");
+            var request = gson.fromJson(ctx.body(), JoinGameRequest.class);
+            gameService.joinGame(ctx.header("authorization"), request);
+            sendBody(ctx, 200, Map.of());
+        } catch (BadRequestException e) {
+            sendError(ctx, 400, "bad request");
+        } catch (UnauthorizedException e) {
+            sendError(ctx, 401, "unauthorized");
+        } catch (AlreadyTakenException e) {
+            sendError(ctx, 403, "already taken");
+        } catch (DataAccessException e) {
+            sendError(ctx, 500, e.getMessage());
         }
     }
 
-    private void clear(Context ctx){
+    private void createGame(Context ctx) {
+        try {
+            var request = gson.fromJson(ctx.body(), CreateGameRequest.class);
+            var result = gameService.createGame(ctx.header("authorization"), request);
+            sendBody(ctx, 200, result);
+        } catch (BadRequestException e) {
+            sendError(ctx, 400, "bad request");
+        } catch (UnauthorizedException e) {
+            sendError(ctx, 401, "unauthorized");
+        } catch (DataAccessException e) {
+            sendError(ctx, 500, e.getMessage());
+        }
+    }
+    
+    private void listGames(Context ctx) {
+        try {
+            var result = gameService.listGames(ctx.header("authorization"));
+            sendBody(ctx, 200, result);
+        } catch (UnauthorizedException e) {
+            sendError(ctx, 401, "unauthorized");
+        } catch (DataAccessException e) {
+            sendError(ctx, 500, e.getMessage());
+        }
+    }
+
+    private void logout(Context ctx) {
+        try {
+            userService.logout(ctx.header("authorization"));
+            sendBody(ctx, 200, Map.of());
+        } catch (UnauthorizedException e) {
+            sendError(ctx, 401, "unauthorized");
+        } catch (DataAccessException e) {
+            sendError(ctx, 500, e.getMessage());
+        }
+    }
+
+    private void login(Context ctx) {
+        try {
+            var request = gson.fromJson(ctx.body(), LoginRequest.class);
+            var result = userService.login(request);
+            sendBody(ctx, 200, result);
+        } catch (BadRequestException e) {
+            sendError(ctx, 400, "bad request");
+        } catch (UnauthorizedException e) {
+            sendError(ctx, 401, "unauthorized");
+        } catch (DataAccessException e) {
+            sendError(ctx, 500, e.getMessage());
+        }
+    }
+
+    private void register(Context ctx) {
+        try {
+            var request = gson.fromJson(ctx.body(), RegisterRequest.class);
+            var result = userService.register(request);
+            sendBody(ctx, 200, result);
+        } catch (BadRequestException e) {
+            sendError(ctx, 400, "bad request");
+        } catch (AlreadyTakenException e) {
+            sendError(ctx, 403, "already taken");
+        } catch (DataAccessException e) {
+            sendError(ctx, 500, e.getMessage());
+        }
+    }
+
+    private void clear(Context ctx) {
         try {
             clearService.clear();
-            ctx.status(200);
-            ctx.result("{}");
+            sendBody(ctx, 200, Map.of());
         } catch (DataAccessException e) {
-            ctx.status(500);
-            var serializer = new Gson();
-            ctx.result(serializer.toJson(Map.of("message", "Error: " + e.getMessage())));
+            sendError(ctx, 500, e.getMessage());
         }
+    }
+
+    private void sendError(Context ctx, int status, String message) {
+        sendBody(ctx, status, Map.of("message", "Error: " + message));
+    }
+
+    private void sendBody(Context ctx, int status, Object body) {
+        ctx.status(status);
+        ctx.contentType("application/json");
+        ctx.result(gson.toJson(body));
     }
 
     public int run(int desiredPort) {

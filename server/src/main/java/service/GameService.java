@@ -4,11 +4,7 @@ import chess.ChessGame;
 import dataaccess.*;
 import model.AuthData;
 import model.GameData;
-import server.CreateGameResult;
-import server.GameSummary;
-import server.JoinGameRequest;
-import server.ListGameResult;
-
+import server.*;
 import java.util.Collection;
 
 public class GameService {
@@ -22,7 +18,7 @@ public class GameService {
 
     public ListGameResult listGames(String authToken) throws DataAccessException {
         requireAuth(authToken);
-        var summaries = gameDAO.listGames().stream().map(GameSummary::from)toList();
+        var summaries = gameDAO.listGames().stream().map(GameSummary::from).toList();
         return new ListGameResult((Collection<GameSummary>) summaries);
     }
 
