@@ -16,6 +16,7 @@ public class Server {
     private final GameService gameService;
     private final UserService userService;
 
+    /* Server logic and memory management */
     public Server() {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
@@ -29,7 +30,7 @@ public class Server {
 
         javalin.post("/user", this::register);
         javalin.post("/session", this::login);
-        javalin.post("/session", this::logout);
+        javalin.delete("/session", this::logout);
         javalin.get("/game", this::listGames);
         javalin.post("/game", this::createGame);
         javalin.put("/game", this::joinGame);
@@ -37,6 +38,9 @@ public class Server {
 
         javalin.exception(Exception.class, (e, ctx) -> sendBody(ctx, 500, Map.of("message", "Error: " + e.getMessage())));
     }
+
+
+    /* The functions below deal with Handlers, sending the date to the Service for logic applications */
 
     private void joinGame(Context ctx) {
         try {
@@ -126,6 +130,9 @@ public class Server {
             sendError(ctx, 500, e.getMessage());
         }
     }
+
+
+    /* Helper functions */
 
     private void sendError(Context ctx, int status, String message) {
         sendBody(ctx, status, Map.of("message", "Error: " + message));

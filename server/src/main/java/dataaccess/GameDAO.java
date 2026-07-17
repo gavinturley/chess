@@ -3,6 +3,7 @@ package dataaccess;
 import model.GameData;
 import java.util.Collection;
 
+// Data Access Object for game data
 public interface GameDAO {
     int createGame(GameData g) throws DataAccessException;
     GameData getGame(int gameID) throws DataAccessException;

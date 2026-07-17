@@ -9,6 +9,8 @@ import server.RegisterRequest;
 
 import java.util.UUID;
 
+/* Implements Service logic dealing with the users */
+
 public class UserService {
     private final UserDAO userDAO;
     private final AuthDAO authDAO;

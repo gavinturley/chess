@@ -7,6 +7,8 @@ import model.GameData;
 import server.*;
 import java.util.Collection;
 
+
+/* Implements Service logic dealing with the game board */
 public class GameService {
     final private GameDAO gameDAO;
     final private AuthDAO authDAO;

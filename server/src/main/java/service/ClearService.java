@@ -7,6 +7,8 @@ public class ClearService {
     private final UserDAO userDAO;
     private final AuthDAO authDAO;
 
+    /* Implements Service logic dealing with the clear() endpoint */
+
     public ClearService(GameDAO gameDAO, UserDAO userDAO, AuthDAO authDAO){
         this.gameDAO = gameDAO;
         this.userDAO = userDAO;
