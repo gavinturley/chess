@@ -131,16 +131,34 @@ public class ChessBoard {
             for (int col = 0; col < 8; col++) {
 
                 ChessGame.TeamColor currentColor;
-                if (row < 2) currentColor = ChessGame.TeamColor.WHITE;
-                else currentColor = ChessGame.TeamColor.BLACK;
+                if (row < 2) {
+                    currentColor = ChessGame.TeamColor.WHITE;
+                }
+                else {
+                    currentColor = ChessGame.TeamColor.BLACK;
+                }
 
-                if (row == 1 || row == 6) chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.PAWN);
-                else if (row == 0 || row == 7){
-                    if (col == 0 || col == 7) chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.ROOK);
-                    else if (col == 1 || col == 6) chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.KNIGHT);
-                    else if (col == 2 || col == 5) chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.BISHOP);
-                    else if (col == 3) chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.QUEEN);
-                    else chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.KING);
+                if (row == 1 || row == 6) {
+                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.PAWN);
+                }
+
+                if (row != 0 || row != 7){
+                    continue;
+                }
+                if (col == 0 || col == 7) {
+                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.ROOK);
+                }
+                else if (col == 1 || col == 6) {
+                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.KNIGHT);
+                }
+                else if (col == 2 || col == 5) {
+                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.BISHOP);
+                }
+                else if (col == 3) {
+                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.QUEEN);
+                }
+                else {
+                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.KING);
                 }
             }
         }

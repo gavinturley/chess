@@ -53,7 +53,9 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         // valid if doesn't leave king in check or move king into check
-        if (gameBoard.getPiece(startPosition) == null) return null;
+        if (gameBoard.getPiece(startPosition) == null) {
+            return null;
+        }
 
         Collection<ChessMove> moves = new ArrayList<>();
         ChessPiece currentPiece = gameBoard.getPiece(startPosition);
@@ -94,10 +96,14 @@ public class ChessGame {
                 break;
             }
         }
-        if (!isValid) throw new InvalidMoveException("Not a valid move.");
+        if (!isValid) {
+            throw new InvalidMoveException("Not a valid move.");
+        }
 
         ChessGame.TeamColor pieceColor = gameBoard.getPiece(move.getStartPosition()).getTeamColor();
-        if (teamTurn != pieceColor) throw new InvalidMoveException("Not your turn");
+        if (teamTurn != pieceColor) {
+            throw new InvalidMoveException("Not your turn");
+        }
 
         updateCastlingAllowance(move, gameBoard.getPiece(move.getStartPosition()));
 
@@ -128,10 +134,18 @@ public class ChessGame {
         }
 
         if (movingPiece.getPieceType() == ChessPiece.PieceType.ROOK) {
-            if (start.equals(new ChessPosition(1, 1))) gameBoard.setWhiteQueenSideCastle(false);
-            if (start.equals(new ChessPosition(1, 8))) gameBoard.setWhiteKingSideCastle(false);
-            if (start.equals(new ChessPosition(8, 1))) gameBoard.setBlackQueenSideCastle(false);
-            if (start.equals(new ChessPosition(8, 8))) gameBoard.setBlackKingSideCastle(false);
+            if (start.equals(new ChessPosition(1, 1))) {
+                gameBoard.setWhiteQueenSideCastle(false);
+            }
+            if (start.equals(new ChessPosition(1, 8))) {
+                gameBoard.setWhiteKingSideCastle(false);
+            }
+            if (start.equals(new ChessPosition(8, 1))) {
+                gameBoard.setBlackQueenSideCastle(false);
+            }
+            if (start.equals(new ChessPosition(8, 8))) {
+                gameBoard.setBlackKingSideCastle(false);
+            }
         }
     }
 
@@ -151,9 +165,13 @@ public class ChessGame {
             for (int col = 0; col < 8; col++) {
                 ChessPosition tile = new ChessPosition(row + 1, col + 1);
                 ChessPiece piece = board.getPiece(tile);
-                if (piece == null) continue;
+                if (piece == null) {
+                    continue;
+                }
                 for (ChessMove move : piece.pieceMoves(board, tile)){
-                    if (move.getEndPosition().equals(kingPosition)) return true;
+                    if (move.getEndPosition().equals(kingPosition)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -165,7 +183,9 @@ public class ChessGame {
             for (int col = 0; col < 8; col++){
                 ChessPosition tile = new ChessPosition(row + 1, col + 1);
                 ChessPiece piece = board.getPiece(tile);
-                if (piece == null) continue;
+                if (piece == null) {
+                    continue;
+                }
                 if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == teamColor){
                     return tile;
                 }
@@ -179,9 +199,13 @@ public class ChessGame {
             for (int col = 0; col < 8; col++) {
                 ChessPosition tile = new ChessPosition(row + 1, col + 1);
                 ChessPiece piece = gameBoard.getPiece(tile);
-                if (piece == null || piece.getTeamColor() != teamColor) continue;
+                if (piece == null || piece.getTeamColor() != teamColor) {
+                    continue;
+                }
                 Collection <ChessMove> moves = validMoves(tile);
-                if (moves != null && !moves.isEmpty()) return false;
+                if (moves != null && !moves.isEmpty()) {
+                    return false;
+                }
 
             }
         }

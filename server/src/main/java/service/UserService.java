@@ -6,6 +6,7 @@ import model.AuthData;
 import server.AuthResult;
 import server.LoginRequest;
 import server.RegisterRequest;
+import service.ServiceHelp;
 
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class UserService {
     }
 
     public AuthResult register(RegisterRequest request) throws DataAccessException {
-        if (isBlank(request.username()) || isBlank(request.password()) || isBlank(request.email())){
+        if (ServiceHelp.isBlank(request.username()) || ServiceHelp.isBlank(request.password()) || ServiceHelp.isBlank(request.email())){
             throw new BadRequestException("Error: bad request");
         }
         if (userDAO.getUser(request.username()) != null){
@@ -35,7 +36,7 @@ public class UserService {
     }
 
     public AuthResult login(LoginRequest request) throws DataAccessException {
-        if (isBlank(request.username()) || isBlank(request.password())){
+        if (ServiceHelp.isBlank(request.username()) || ServiceHelp.isBlank(request.password())){
             throw new BadRequestException("Error: bad request");
         }
 
@@ -48,7 +49,7 @@ public class UserService {
     }
 
     public void logout(String authToken) throws DataAccessException {
-        var auth = requireAuth(authToken);
+        var auth = ServiceHelp.requireAuth(authDAO, authToken);
         authDAO.deleteAuth(auth.authToken());
     }
 
@@ -57,21 +58,6 @@ public class UserService {
         var auth = new AuthData(authToken, username);
         authDAO.createAuth(auth);
         return new AuthResult(auth.username(), auth.authToken());
-    }
-
-    private AuthData requireAuth(String authToken) throws DataAccessException {
-        if (authToken == null){
-            throw new UnauthorizedException("Error: unauthorized");
-        }
-        var auth = authDAO.getAuth(authToken);
-        if (auth == null){
-            throw new UnauthorizedException("Error: unauthorized");
-        }
-        return auth;
-    }
-
-    private static boolean isBlank(String string) {
-        return string == null || string.isBlank();
     }
 
     private static String generateToken() {

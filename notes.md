@@ -2,16 +2,16 @@
 
 You can use the following commands to build, test, package, and run your code.
 
-| Command                    | Description                                     |
-|----------------------------| ----------------------------------------------- |
-| `mvn compile`              | Builds the code                                 |
-| `mvn package`              | Run the tests and build an Uber jar file        |
-| `mvn package -DskipTests`  | Build an Uber jar file                          |
+| Command                    | Description                                 |
+|----------------------------|---------------------------------------------|
+| `mvn compile`              | Builds the code                             |
+| `mvn package`              | Run the tests and build an Uber jar file    |
+| `mvn package -DskipTests`  | Build an Uber jar file                      |
 | `mvn install`              | Installs the packages into the local repository |
-| `mvn test`                 | Run all the tests                               |
-| `mvn -pl shared test`      | Run all the shared tests                        |
-| `mvn -pl client exec:java` | Build and run the client `Main`                 |
-| `mvn -pl server exec:java` | Build and run the server `Main`                 |
+| `mvn test`                 | Run all the tests                           |
+| `mvn -pl shared test`      | Run all the shared tests                    |
+| `mvn -pl client exec:java` | Build and run the client `Main`             |
+| `mvn -pl server exec:java` | Build and run the server `Main`             |
 `mvn clean install`
 `mvn test -pl server`
 
