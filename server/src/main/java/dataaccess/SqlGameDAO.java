@@ -98,6 +98,8 @@ public class SqlGameDAO implements GameDAO{
     }
 
     public void configureDatabase() throws DataAccessException {
+        DatabaseManager.createDatabase();
+
         try (var conn = DatabaseManager.getConnection()) {
             String statement = """
             CREATE TABLE IF NOT EXISTS game (

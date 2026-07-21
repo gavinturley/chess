@@ -211,13 +211,15 @@ public class ChessPiece {
                     break;
                 }
 
-                ChessGame.TeamColor thatColor = board.getPiece(newPosition).getTeamColor();
-                if (thisColor == thatColor) {
+                ChessPiece pieceAtSquare = board.getPiece(newPosition);
+                if (pieceAtSquare == null){
+                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    continue;
+                } else if (thisColor == pieceAtSquare.getTeamColor()) {
                     break;
+                } else {
+                    moves.add(new ChessMove(myPosition, newPosition, null));
                 }
-
-                /* Gets here if the colors are different or the other color is null */
-                moves.add(new ChessMove(myPosition, newPosition, null));
             }
         }
 

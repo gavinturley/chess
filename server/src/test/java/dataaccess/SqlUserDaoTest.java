@@ -1,7 +1,5 @@
-package sql;
+package dataaccess;
 
-import dataaccess.DataAccessException;
-import dataaccess.SqlUserDAO;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +39,7 @@ public class SqlUserDaoTest {
 
         var retrieved = userDAO.getUser("saylor");
         assertNotNull(retrieved);
-        assertEquals("saylor", retieved.username());
+        assertEquals("saylor", retrieved.username());
         assertEquals("say@email.com", retrieved.email());
     }
 

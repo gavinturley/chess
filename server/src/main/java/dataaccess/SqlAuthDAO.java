@@ -56,6 +56,8 @@ public class SqlAuthDAO implements AuthDAO{
     }
 
     public void configureDatabase() throws DataAccessException {
+        DatabaseManager.createDatabase();
+
         String statement = """
                     CREATE TABLE IF NOT EXISTS auth (
                     authToken VARCHAR(255) NOT NULL PRIMARY KEY,

@@ -50,6 +50,8 @@ public class SqlUserDAO implements UserDAO{
     }
 
     public void configureDatabase() throws DataAccessException {
+        DatabaseManager.createDatabase();
+
         var createStatements = """
                 CREATE TABLE IF NOT EXISTS user (
                    username VARCHAR(255) NOT NULL PRIMARY KEY,

@@ -1,10 +1,9 @@
-package sql;
+package dataaccess;
 
 import chess.ChessGame;
-import dataaccess.DataAccessException;
-import dataaccess.SqlGameDAO;
 import model.GameData;
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SqlGameDaoTest {
     private SqlGameDAO gameDAO;
@@ -27,7 +26,7 @@ public class SqlGameDaoTest {
     @Test
     public void createGameNegative() {
         // Test missing game name
-        var game = new GameData(0, null, null, new ChessGame());
+        var game = new GameData(0, null, null, "gameName", new ChessGame());
         assertThrows(DataAccessException.class, () -> gameDAO.createGame(game));
     }
 
