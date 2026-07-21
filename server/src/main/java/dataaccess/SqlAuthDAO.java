@@ -11,7 +11,7 @@ public class SqlAuthDAO implements AuthDAO{
     }
 
     public void createAuth(AuthData auth) throws DataAccessException {
-        var statement = "INSERT INTO auth (authToken, username) VALUES (?, ?)";
+        String statement = "INSERT INTO auth (authToken, username) VALUES (?, ?)";
         try (var conn = DatabaseManager.getConnection()){
             var preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, auth.authToken());
@@ -23,13 +23,13 @@ public class SqlAuthDAO implements AuthDAO{
     }
 
     public AuthData getAuth(String authToken) throws DataAccessException {
-        var statement = "SELECT authToken, username FROM auth WHERE authToken=?";
+        String statement = "SELECT authToken, username FROM auth WHERE authToken=?";
         try (var conn = DatabaseManager.getConnection()){
             try (var preparedStatement = conn.prepareStatement(statement)){
                 preparedStatement.setString(1, authToken);
-                try (var returnStatement = preparedStatement.executeQuery()){
-                    if (returnStatement.next()) {
-                        return new AuthData(returnStatement.getString("authToken"), returnStatement.getString("username"));
+                try (var resultSet = preparedStatement.executeQuery()){
+                    if (resultSet.next()) {
+                        return new AuthData(resultSet.getString("authToken"), resultSet.getString("username"));
                     }
                 }
             }
@@ -40,7 +40,7 @@ public class SqlAuthDAO implements AuthDAO{
     }
 
     public void deleteAuth(String authToken) throws DataAccessException {
-        var statement = "DELETE FROM authToken WHERE authToken=?";
+        String statement = "DELETE FROM authToken WHERE authToken=?";
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.setString(1, authToken);
@@ -56,7 +56,7 @@ public class SqlAuthDAO implements AuthDAO{
     }
 
     public void configureDatabase() throws DataAccessException {
-        var statement = """
+        String statement = """
                     CREATE TABLE IF NOT EXISTS auth (
                     authToken VARCHAR(255) NOT NULL PRIMARY KEY,
                     username VARCHAR(255) NOT NULL,
