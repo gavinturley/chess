@@ -5,6 +5,10 @@ import java.sql.SQLException;
 
 public class SqlGameDAO {
 
+    public void clear() throws DataAccessException {
+        SqlHelp.clear("game");
+    }
+
     public SqlGameDAO() throws DataAccessException, SQLException {
         try (var conn = DatabaseManager.getConnection()) {
             for (var statement : createStatements) {

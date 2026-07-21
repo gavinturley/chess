@@ -41,14 +41,7 @@ public class SqlUserDAO {
     }
 
     public void clear() throws DataAccessException {
-        var statement = "TRUNCATE user";
-        try (var conn = DatabaseManager.getConnection()){
-            try (var preparedStatement = conn.prepareStatement(statement)){
-                preparedStatement.executeUpdate();
-            }
-        } catch (SQLException exception) {
-            throw new RuntimeException(exception);
-        }
+        SqlHelp.clear("user");
     }
 
     public String passwordEncryptor(String password) {
@@ -56,14 +49,14 @@ public class SqlUserDAO {
     }
 
     public void configureDatabase() throws DataAccessException {
-        try (var conn = DatabaseManager.getConnection()) {
-            var createStatements = """
+        var createStatements = """
                 CREATE TABLE IF NOT EXISTS user (
                    username VARCHAR(255) NOT NULL PRIMARY KEY,
                    password VARCHAR(255) NOT NULL,
                    email VARCHAR(255) NOT NULL
                 );
                 """;
+        try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(createStatements)) {
                 preparedStatement.executeUpdate();
             }
