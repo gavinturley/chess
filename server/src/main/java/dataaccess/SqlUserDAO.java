@@ -1,5 +1,6 @@
 package dataaccess;
 
+import model.GameData;
 import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 
