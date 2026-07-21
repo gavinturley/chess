@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class SqlGameDAO {
+public class SqlGameDAO implements GameDAO{
     private final Gson gson = new Gson();
 
     public SqlGameDAO() throws DataAccessException {

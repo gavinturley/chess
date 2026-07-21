@@ -6,7 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 
-public class SqlUserDAO {
+public class SqlUserDAO implements UserDAO{
     public SqlUserDAO() throws DataAccessException {
         configureDatabase();
     }

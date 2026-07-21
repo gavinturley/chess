@@ -5,7 +5,7 @@ import model.UserData;
 
 import java.sql.SQLException;
 
-public class SqlAuthDAO {
+public class SqlAuthDAO implements AuthDAO{
     public SqlAuthDAO() throws DataAccessException {
         configureDatabase();
     }
