@@ -52,7 +52,14 @@ public class SqlAuthDAO implements AuthDAO{
     }
 
     public void clear() throws DataAccessException {
-        SqlHelp.clear("auth");
+        var statement = "DELETE FROM auth";
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException exception) {
+            throw new DataAccessException(exception.getMessage());
+        }
     }
 
     public void configureDatabase() throws DataAccessException {
