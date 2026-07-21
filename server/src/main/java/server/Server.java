@@ -17,12 +17,12 @@ public class Server {
     private final UserService userService;
 
     /* Server logic and memory management */
-    public Server() {
+    public Server() throws DataAccessException {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
-        var userDAO = new MemoryUserDAO();
-        var gameDAO = new MemoryGameDAO();
-        var authDAO = new MemoryAuthDAO();
+        UserDAO userDAO = new SqlUserDAO();
+        GameDAO gameDAO = new SqlGameDAO();
+        AuthDAO authDAO = new SqlAuthDAO();
 
         clearService = new ClearService(gameDAO, userDAO, authDAO);
         gameService = new GameService(gameDAO, authDAO);

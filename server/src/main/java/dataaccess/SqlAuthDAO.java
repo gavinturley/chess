@@ -18,7 +18,7 @@ public class SqlAuthDAO implements AuthDAO{
             preparedStatement.setString(2, auth.username());
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
     }
 
@@ -34,20 +34,20 @@ public class SqlAuthDAO implements AuthDAO{
                 }
             }
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
         return null;
     }
 
     public void deleteAuth(String authToken) throws DataAccessException {
-        String statement = "DELETE FROM authToken WHERE authToken=?";
+        String statement = "DELETE FROM auth WHERE authToken=?";
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 preparedStatement.setString(1, authToken);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class SqlAuthDAO implements AuthDAO{
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
     }
 }

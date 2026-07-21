@@ -12,7 +12,7 @@ public class SqlUserDAO implements UserDAO{
     }
 
     public void createUser(UserData user) throws DataAccessException {
-        var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
+        String statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
         try (var conn = DatabaseManager.getConnection()){
             var preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, user.username());
@@ -20,23 +20,23 @@ public class SqlUserDAO implements UserDAO{
             preparedStatement.setString(3, user.email());
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
     }
 
     public UserData getUser(String username) throws DataAccessException {
-        var statement = "SELECT username, password, email FROM user WHERE username=?";
+        String statement = "SELECT username, password, email FROM user WHERE username=?";
         try (var conn = DatabaseManager.getConnection()){
             try (var preparedStatement = conn.prepareStatement(statement)){
                 preparedStatement.setString(1, username);
-                try (var returnStatement = preparedStatement.executeQuery()){
-                    if (returnStatement.next()) {
-                        return new UserData(returnStatement.getString("username"), returnStatement.getString("password"), returnStatement.getString("email"));
+                try (var resultSet = preparedStatement.executeQuery()){
+                    if (resultSet.next()) {
+                        return new UserData(resultSet.getString("username"), resultSet.getString("password"), resultSet.getString("email"));
                     }
                 }
             }
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
         return null;
     }
@@ -62,7 +62,7 @@ public class SqlUserDAO implements UserDAO{
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
     }
 }

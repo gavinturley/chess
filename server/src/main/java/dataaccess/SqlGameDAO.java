@@ -15,7 +15,7 @@ public class SqlGameDAO implements GameDAO{
     }
 
     public int createGame(GameData game) throws DataAccessException {
-        var statement = "INSERT INTO game (gameID, whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?, ?)";
+        String statement = "INSERT INTO game (whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?)";
         try (var conn = DatabaseManager.getConnection()){
             var preparedStatement = conn.prepareStatement(statement);
             preparedStatement.setString(1, game.whiteUsername());
@@ -31,44 +31,44 @@ public class SqlGameDAO implements GameDAO{
             }
             throw new DataAccessException("Failed to generate game ID");
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
     }
 
     public GameData getGame(int gameID) throws DataAccessException {
-        var statement = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game WHERE gameID=?";
+        String statement = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game WHERE gameID=?";
         try (var conn = DatabaseManager.getConnection()){
             try (var preparedStatement = conn.prepareStatement(statement)){
                 preparedStatement.setInt(1, gameID);
-                try (var returnStatement = preparedStatement.executeQuery()){
-                    if (returnStatement.next()) {
-                        return readGame(returnStatement);
+                try (var resultSet = preparedStatement.executeQuery()){
+                    if (resultSet.next()) {
+                        return readGame(resultSet);
                     }
                 }
             }
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
         return null;
     }
 
     public Collection<GameData> listGames() throws DataAccessException {
         Collection<GameData> result = new ArrayList<>();
-        var statement = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game";
+        String statement = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM game";
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement);
-             var returnStatement = preparedStatement.executeQuery()){
-            while (returnStatement.next()){
-                result.add(readGame(returnStatement));
+             var resultSet = preparedStatement.executeQuery()){
+            while (resultSet.next()){
+                result.add(readGame(resultSet));
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException exception) {
+            throw new DataAccessException(exception.getMessage());
         }
         return result;
     }
 
     public void updateGame(GameData game) throws DataAccessException {
-        var statement = "UPDATE game SET whiteUsername=?, blackUsername=?, gameName=?, game=? WHERE gameID=?";
+        String statement = "UPDATE game SET whiteUsername=?, blackUsername=?, gameName=?, game=? WHERE gameID=?";
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement)){
             preparedStatement.setString(1, game.whiteUsername());
@@ -77,8 +77,8 @@ public class SqlGameDAO implements GameDAO{
             preparedStatement.setString(4, gson.toJson(game.game()));
             preparedStatement.setInt(5, game.gameID());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException exception) {
+            throw new DataAccessException(exception.getMessage());
         }
     }
 
@@ -99,7 +99,7 @@ public class SqlGameDAO implements GameDAO{
 
     public void configureDatabase() throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = """
+            String statement = """
             CREATE TABLE IF NOT EXISTS game (
                 gameID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 whiteUsername VARCHAR(255),
@@ -112,7 +112,7 @@ public class SqlGameDAO implements GameDAO{
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            throw new DataAccessException(exception.getMessage());
         }
     }
 }
