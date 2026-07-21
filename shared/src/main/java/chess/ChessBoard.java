@@ -142,7 +142,7 @@ public class ChessBoard {
                     chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.PAWN);
                 }
 
-                if (row != 0 || row != 7){
+                if (row != 0 && row != 7){
                     continue;
                 }
                 if (col == 0 || col == 7) {

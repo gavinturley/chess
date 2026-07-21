@@ -26,7 +26,7 @@ public class SqlGameDaoTest {
     @Test
     public void createGameNegative() {
         // Test missing game name
-        var game = new GameData(0, null, null, "gameName", new ChessGame());
+        var game = new GameData(0, null, null, null, new ChessGame());
         assertThrows(DataAccessException.class, () -> gameDAO.createGame(game));
     }
 

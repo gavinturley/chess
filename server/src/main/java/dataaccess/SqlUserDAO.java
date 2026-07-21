@@ -42,7 +42,14 @@ public class SqlUserDAO implements UserDAO{
     }
 
     public void clear() throws DataAccessException {
-        SqlHelp.clear("user");
+        var statement = "DELETE FROM user";
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException exception) {
+            throw new DataAccessException(exception.getMessage());
+        }
     }
 
     public String passwordEncryptor(String password) {

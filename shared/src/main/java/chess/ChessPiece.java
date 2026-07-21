@@ -219,6 +219,7 @@ public class ChessPiece {
                     break;
                 } else {
                     moves.add(new ChessMove(myPosition, newPosition, null));
+                    break;
                 }
             }
         }

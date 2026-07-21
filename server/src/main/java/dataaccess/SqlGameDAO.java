@@ -17,7 +17,7 @@ public class SqlGameDAO implements GameDAO{
     public int createGame(GameData game) throws DataAccessException {
         String statement = "INSERT INTO game (whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?)";
         try (var conn = DatabaseManager.getConnection()){
-            var preparedStatement = conn.prepareStatement(statement);
+            var preparedStatement = conn.prepareStatement(statement, java.sql.Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, game.whiteUsername());
             preparedStatement.setString(2, game.blackUsername());
             preparedStatement.setString(3, game.gameName());
@@ -83,7 +83,14 @@ public class SqlGameDAO implements GameDAO{
     }
 
     public void clear() throws DataAccessException {
-        SqlHelp.clear("game");
+        var statement = "DELETE FROM game";
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException exception) {
+            throw new DataAccessException(exception.getMessage());
+        }
     }
 
     private GameData readGame(java.sql.ResultSet resultSet) throws SQLException {

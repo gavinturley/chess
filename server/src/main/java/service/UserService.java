@@ -42,7 +42,7 @@ public class UserService {
         }
 
         var user = userDAO.getUser(request.username());
-        if (user == null || !BCrypt.checkpw(user.password(), request.password())){
+        if (user == null || !BCrypt.checkpw(request.password(), user.password())){
             throw new UnauthorizedException("Error: unauthorized");
         }
 
