@@ -23,7 +23,7 @@ public class GameService {
     public ListGameResult listGames(String authToken) throws DataAccessException {
         ServiceHelp.requireAuth(authDAO, authToken);
         var summaries = gameDAO.listGames().stream().map(GameSummary::from).toList();
-        return new ListGameResult((Collection<GameSummary>) summaries);
+        return new ListGameResult(summaries);
     }
 
     public CreateGameResult createGame(String authToken, CreateGameRequest request) throws DataAccessException {
