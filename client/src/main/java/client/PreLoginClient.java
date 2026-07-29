@@ -1,4 +1,4 @@
 package client;
 
-public class PreloginClient {
+public class PreLoginClient {
 }

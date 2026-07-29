@@ -1,5 +1,8 @@
 package client;
 
+import java.util.Collection;
+import model.GameData;
+
 public class ServerFacadeRecords {
     public record RegisterRequest(String username, String password, String email) {}
     public record LoginRequest(String username, String password) {}

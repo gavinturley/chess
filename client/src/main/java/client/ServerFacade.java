@@ -6,8 +6,10 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+
 
 public class ServerFacade {
     private final String serverUrl;
@@ -45,7 +47,7 @@ public class ServerFacade {
         record CreateGameRequest(String gameName) {}
         record CreateGameResult(int gameID) {}
         var request = new CreateGameRequest(gameName);
-        var result = this.makeRequest("POST", "/game", authToken, request, null);
+        var result = this.makeRequest("POST", "/game", authToken, request, CreateGameResult.class);
         return result.gameID();
     }
 
@@ -81,7 +83,7 @@ public class ServerFacade {
         }
     }
 
-    private static void writeBody(Object request, HttpURLConnection http) throw IOException {
+    private static void writeBody(Object request, HttpURLConnection http) throws IOException {
         if (request != null) {
             http.addRequestProperty("Content-Type", "application/json");
             String reqData = new Gson().toJson(request);
@@ -91,7 +93,7 @@ public class ServerFacade {
         }
     }
 
-    private void throwIfNotSuccessful(HttpURLConnection http) throwsIOException, ResponseException {
+    private void throwIfNotSuccessful(HttpURLConnection http) throws IOException, ResponseException {
         int status = http.getResponseCode();
         if (status != 200) {
             String message = "Error: an unknown error occurred";
