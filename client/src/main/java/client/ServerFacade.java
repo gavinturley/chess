@@ -82,7 +82,41 @@ public class ServerFacade {
     }
 
     private static void writeBody(Object request, HttpURLConnection http) throw IOException {
-        if (request != null) 
+        if (request != null) {
+            http.addRequestProperty("Content-Type", "application/json");
+            String reqData = new Gson().toJson(request);
+            try (OutputStream reqBody = http.getOutputStream()) {
+                reqBody.write(reqData.getBytes());
+            }
+        }
     }
 
+    private void throwIfNotSuccessful(HttpURLConnection http) throwsIOException, ResponseException {
+        int status = http.getResponseCode();
+        if (status != 200) {
+            String message = "Error: an unknown error occurred";
+            try (InputStream responseError = http.getErrorStream()) {
+                if (responseError != null) {
+                    var errorMap = new Gson().fromJson(new InputStreamReader(responseError), Map.class);
+                    if (errorMap != null && errorMap.get("message") != null){
+                        message = errorMap.get("message").toString();
+                    }
+                }
+            }
+            throw new ResponseException(status, message);
+        }
+    }
+
+    private static <T> T readBody(HttpURLConnection http, Class<T> responseClass) throws IOException {
+        T response = null;
+        if (http.getContentLength() < 0) {
+            try (InputStream responseBody = http.getInputStream()) {
+                InputStreamReader reader = new InputStreamReader(responseBody);
+                if (responseClass != null) {
+                    response = new Gson().fromJson(reader, responseClass);
+                }
+            }
+        }
+        return response;
+    }
 }
