@@ -1,5 +1,6 @@
 package ui;
 
+<<<<<<< HEAD
 import chess.*;
 import static ui.EscapeSequences.*;
 
@@ -14,4 +15,7 @@ public class BoardPrinter {
 
         
     }
+=======
+public class BoardPrinter {
+>>>>>>> 2f336ee163dd23f28beec431ce57ff67365c72ed
 }
