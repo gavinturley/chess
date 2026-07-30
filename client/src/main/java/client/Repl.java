@@ -1,10 +1,8 @@
 package client;
 
 import java.util.Scanner;
-import ui.EscapeSequences.SET_TEXT_COLOR_GREEN;
-import ui.EscapeSequences.RESET_TEXT_COLOR;
-
 import static ui.EscapeSequences.RESET_TEXT_COLOR;
+import static ui.EscapeSequences.SET_TEXT_COLOR_GREEN;
 
 
 public class Repl {
@@ -16,9 +14,9 @@ public class Repl {
     private String username = null;
 
     public Repl(String serverURL) {
-        ServerFacade facade = new ServerFacade(serverURL);
-        this.preLoginClient = new PreLoginClient(facade, this);
-        this.postLoginClient = new PostLoginClient(facade, this);
+        ServerFacade serverFacade = new ServerFacade(serverURL);
+        this.preLoginClient = new PreLoginClient(serverFacade, this);
+        this.postLoginClient = new PostLoginClient(serverFacade, this);
     }
 
     public void run(){
@@ -27,7 +25,7 @@ public class Repl {
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
-        while (result.equals("quit")){
+        while (!result.equals("quit")){
             printPrompt();
             String line = scanner.nextLine();
             try {

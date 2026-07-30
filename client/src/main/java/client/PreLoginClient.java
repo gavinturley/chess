@@ -35,7 +35,7 @@ public class PreLoginClient {
         if (params.length != 2) {
             return "Expected: login <USERNAME> <PASSWORD>";
         }
-        AuthData authData = server.login(params[0], params[1]);
+        AuthData authData = serverFacade.login(params[0], params[1]);
         signIn(authData);
         return String.format("Signed in as %s.\n", authData.username());
     }
@@ -44,7 +44,7 @@ public class PreLoginClient {
         if (params.length != 3) {
             return "Expected: register <USERNAME> <PASSWORD> <EMAIL>";
         }
-        AuthData authData = server.register(params[0], params[1], params[2]);
+        AuthData authData = serverFacade.register(params[0], params[1], params[2]);
         signIn(authData);
         return String.format("Registered and signed in as %s.\n", authData.username());
     }

@@ -7,7 +7,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
-import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -15,7 +14,7 @@ public class ServerFacade {
     private final String serverUrl;
 
     public ServerFacade(int port) {
-        this.serverUrl = "https://localhost:" + port;
+        this.serverUrl = "http://localhost:" + port;
     }
 
     public ServerFacade(String url) {
