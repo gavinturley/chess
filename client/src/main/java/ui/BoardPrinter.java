@@ -13,10 +13,10 @@ public class BoardPrinter {
 
         boolean whitePerspective = perspective != ChessGame.TeamColor.BLACK;
 
-        stringBuilder.append(columnHeaders(whitePerspective));
+        stringBuilder.append(columnLabel(whitePerspective));
 
-        int startRow = whitePerspective ? BOARD_SIZE : 1;
-        int endRow = whitePerspective ? 1 : BOARD_SIZE;
+        int startRow = whitePerspective ? 1 : BOARD_SIZE;
+        int endRow = whitePerspective ? BOARD_SIZE : 1;
         int rowStep = whitePerspective ? -1 : 1;
 
         for (int row = startRow; whitePerspective ? row <= endRow: row >= endRow; row += rowStep){
@@ -28,7 +28,7 @@ public class BoardPrinter {
 
             for (int col = startCol; whitePerspective ? col <= endCol: col >= endCol; col += colStep){
                 boolean isWhite = (row + col) % 2 == 0;
-                stringBuilder.append(isWhite ? SET_BG_COLOR_WHITE : SET_BG_COLOR_DARK_GREY);
+                stringBuilder.append(isWhite ? SET_BG_COLOR_LIGHT_BROWN : SET_BG_COLOR_DARK_GREEN);
                 stringBuilder.append(pieceAt(board, row, col));
                 stringBuilder.append(RESET_BG_COLOR);
             }
@@ -36,7 +36,7 @@ public class BoardPrinter {
             stringBuilder.append(rowLabel(row)).append(RESET_TEXT_COLOR).append("\n");
         }
 
-        stringBuilder.append(columnHeaders(whitePerspective));
+        stringBuilder.append(columnLabel(whitePerspective));
         return stringBuilder.toString();
     }
 
@@ -47,7 +47,7 @@ public class BoardPrinter {
         }
 
         boolean isTan = piece.getTeamColor() == ChessGame.TeamColor.WHITE;
-        String color = isTan ? SET_TEXT_COLOR_TAN : SET_BG_COLOR_BLACK;
+        String color = isTan ? SET_TEXT_COLOR_WHITE : SET_TEXT_COLOR_BLACK;
         String pieceImg = switch (piece.getPieceType()){
             case KING -> isTan ? WHITE_KING : BLACK_KING;
             case QUEEN -> isTan ? WHITE_QUEEN : BLACK_QUEEN;
@@ -55,6 +55,28 @@ public class BoardPrinter {
             case KNIGHT -> isTan ? WHITE_KNIGHT : BLACK_KNIGHT;
             case ROOK -> isTan ? WHITE_ROOK : BLACK_ROOK;
             case PAWN -> isTan ? WHITE_PAWN : BLACK_PAWN;
+        };
+
+        return color + pieceImg + RESET_TEXT_COLOR;
+    }
+
+    private static String columnLabel(boolean whitePerspective){
+        StringBuilder stringBuilder = new StringBuilder(EMPTY);
+        char[] letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+        if (whitePerspective){
+            for (char letter : letters){
+                stringBuilder.append(" ").append(letter).append(" ");
+            }
+        } else {
+            for (int i = letters.length - 1; i >= 0; i--){
+                stringBuilder.append(" ").append(letters[i]).append(" ");
+            }
         }
+
+        return stringBuilder.append("\n").toString();
+    }
+
+    private static String rowLabel(int row){
+        return " " + row + " ";
     }
 }
