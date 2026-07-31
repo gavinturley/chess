@@ -86,7 +86,9 @@ public class ChessPiece {
         else if (chessPiece == PieceType.KING) {
             return kingMoves(board, myPosition);
         }
-        else return null;
+        else {
+            return null;
+        }
     }
 
     private boolean checkBounds(ChessPosition position){
