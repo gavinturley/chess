@@ -12,7 +12,7 @@ You can use the following commands to build, test, package, and run your code.
 | `mvn -pl shared test`      | Run all the shared tests                    |
 | `mvn -pl client exec:java` | Build and run the client `Main`             |
 | `mvn -pl server exec:java` | Build and run the server `Main`             |
-`mvn clean install`
+`mvn test -pl client -am -f pom.xml`
 `mvn test -pl client`
 `mvn clean install -f pom.xml`
 

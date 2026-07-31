@@ -32,30 +32,15 @@ public record ChessMove(ChessPosition startPosition, ChessPosition endPosition, 
                 '}';
     }
 
-    /**
-     * @return ChessPosition of starting location
-     */
-    @Override
-    public ChessPosition startPosition() {
+    public ChessPosition getStartPosition() {
         return this.startPosition;
     }
 
-    /**
-     * @return ChessPosition of ending location
-     */
-    @Override
-    public ChessPosition endPosition() {
+    public ChessPosition getEndPosition() {
         return this.endPosition;
     }
 
-    /**
-     * Gets the type of piece to promote a pawn to if pawn promotion is part of this
-     * chess move
-     *
-     * @return Type of piece to promote a pawn to, or null if no promotion
-     */
-    @Override
-    public ChessPiece.PieceType promotionPiece() {
+    public ChessPiece.PieceType getPromotionPiece() {
         return this.promotionPiece;
     }
 }
