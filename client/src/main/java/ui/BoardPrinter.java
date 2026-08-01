@@ -15,11 +15,11 @@ public class BoardPrinter {
 
         stringBuilder.append(columnLabel(whitePerspective));
 
-        int startRow = whitePerspective ? 1 : BOARD_SIZE;
-        int endRow = whitePerspective ? BOARD_SIZE : 1;
+        int startRow = whitePerspective ? BOARD_SIZE : 1;
+        int endRow = whitePerspective ? 1 : BOARD_SIZE;
         int rowStep = whitePerspective ? -1 : 1;
 
-        for (int row = startRow; whitePerspective ? row <= endRow: row >= endRow; row += rowStep){
+        for (int row = startRow; whitePerspective ? row >= endRow : row <= endRow; row += rowStep){
             stringBuilder.append(rowLabel(row));
 
             int startCol = whitePerspective ? 1 : BOARD_SIZE;
@@ -28,7 +28,7 @@ public class BoardPrinter {
 
             for (int col = startCol; whitePerspective ? col <= endCol: col >= endCol; col += colStep){
                 boolean isWhite = (row + col) % 2 == 0;
-                stringBuilder.append(isWhite ? SET_BG_COLOR_LIGHT_BROWN : SET_BG_COLOR_DARK_GREEN);
+                stringBuilder.append(isWhite ? SET_BG_COLOR_DARK_BROWN : SET_BG_COLOR_LIGHT_BROWN);
                 stringBuilder.append(pieceAt(board, row, col));
                 stringBuilder.append(RESET_BG_COLOR);
             }

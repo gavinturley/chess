@@ -120,47 +120,23 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        // blank board
+        ChessPiece.PieceType[] backRank = {
+                ChessPiece.PieceType.ROOK, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.BISHOP,
+                ChessPiece.PieceType.QUEEN, ChessPiece.PieceType.KING,
+                ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.ROOK
+        };
+
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 chessBoard[row][col] = null;
             }
         }
 
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-
-                ChessGame.TeamColor currentColor;
-                if (row < 2) {
-                    currentColor = ChessGame.TeamColor.WHITE;
-                }
-                else {
-                    currentColor = ChessGame.TeamColor.BLACK;
-                }
-
-                if (row == 1 || row == 6) {
-                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.PAWN);
-                }
-
-                if (row != 0 && row != 7){
-                    continue;
-                }
-                if (col == 0 || col == 7) {
-                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.ROOK);
-                }
-                else if (col == 1 || col == 6) {
-                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.KNIGHT);
-                }
-                else if (col == 2 || col == 5) {
-                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.BISHOP);
-                }
-                else if (col == 3) {
-                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.QUEEN);
-                }
-                else {
-                    chessBoard[row][col] = new ChessPiece(currentColor, ChessPiece.PieceType.KING);
-                }
-            }
+        for (int col = 0; col < 8; col++) {
+            chessBoard[0][col] = new ChessPiece(ChessGame.TeamColor.WHITE, backRank[col]);
+            chessBoard[1][col] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+            chessBoard[6][col] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+            chessBoard[7][col] = new ChessPiece(ChessGame.TeamColor.BLACK, backRank[col]);
         }
 
         this.enPassantTarget = null;
