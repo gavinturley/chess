@@ -8,6 +8,7 @@ import static ui.EscapeSequences.SET_TEXT_COLOR_GREEN;
 public class Repl {
     private final PreLoginClient preLoginClient;
     private final PostLoginClient postLoginClient;
+    private final GamePlayClient gamePlayClient;
 
     private State state = State.SIGNED_OUT;
     private String authToken = null;
@@ -17,6 +18,7 @@ public class Repl {
         ServerFacade serverFacade = new ServerFacade(serverURL);
         this.preLoginClient = new PreLoginClient(serverFacade, this);
         this.postLoginClient = new PostLoginClient(serverFacade, this);
+        this.gamePlayClient = new GamePlayClient(serverFacade, this);
     }
 
     public void run(){
@@ -30,6 +32,7 @@ public class Repl {
             String line = scanner.nextLine();
             try {
                 result = state == State.SIGNED_OUT ? preLoginClient.eval(line) : postLoginClient.eval(line);
+
                 System.out.print(result);
             } catch (Throwable exception) {
                 System.out.print("Error: " + exception.getMessage());
