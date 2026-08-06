@@ -56,7 +56,6 @@
             </plugin>
         </plugins>
     </build>
-
     <dependencies>
         <dependency>
             <groupId>edu.byu.cs240</groupId>
