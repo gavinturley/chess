@@ -84,7 +84,7 @@ public class GamePlayClient {
             return "Board not loaded yet.\n";
         }
         ChessGame.TeamColor perspective = (playerColor != null) ? playerColor : ChessGame.TeamColor.WHITE;
-        return BoardPrinter.drawBoard(currentGame.getBoard(), perspective);
+        return BoardPrinter.drawBoard(currentGame.getBoard(), perspective, null);
     }
 
     private String leave() throws ResponseException {
@@ -157,9 +157,11 @@ public class GamePlayClient {
             return "Invalid square. Use chess notation like b3.\n";
         }
 
+        ChessGame.TeamColor perspective = (playerColor != null) ? playerColor : ChessGame.TeamColor.WHITE;
+
         var validMoves = currentGame.validMoves(position);
         if (validMoves == null || validMoves.isEmpty()) {
-            return "No legal moves for that square.\n" + BoardPrinter.drawBoard(currentGame.getBoard(), perspective);
+            return "No legal moves for that square.\n" + BoardPrinter.drawBoard(currentGame.getBoard(), perspective, null);
         }
 
         List<ChessPosition> highlights = new ArrayList<>();
@@ -168,7 +170,6 @@ public class GamePlayClient {
             highlights.add(move.getEndPosition());
         }
 
-        ChessGame.TeamColor perspective = (playerColor != null) ? playerColor : ChessGame.TeamColor.WHITE;
         return BoardPrinter.drawBoard(currentGame.getBoard(), perspective, highlights);
     }
 

@@ -2,12 +2,13 @@ package ui;
 
 import chess.*;
 import static ui.EscapeSequences.*;
+import java.util.Collection;
 
 public class BoardPrinter {
 
     private static final int BOARD_SIZE = 8;
 
-    public static String drawBoard(ChessBoard board, ChessGame.TeamColor perspective) {
+    public static String drawBoard(ChessBoard board, ChessGame.TeamColor perspective, Collection<ChessPosition> highlights) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(RESET_BG_COLOR).append(RESET_TEXT_COLOR);
 
@@ -27,10 +28,11 @@ public class BoardPrinter {
             int colStep = whitePerspective ? 1 : -1;
 
             for (int col = startCol; whitePerspective ? col <= endCol: col >= endCol; col += colStep){
+                ChessPosition here = new ChessPosition(row, col);
                 boolean isWhite = (row + col) % 2 == 0;
-                stringBuilder.append(isWhite ? SET_BG_COLOR_DARK_BROWN : SET_BG_COLOR_LIGHT_BROWN);
-                stringBuilder.append(pieceAt(board, row, col));
-                stringBuilder.append(RESET_BG_COLOR);
+                String defaultBackgroundColor = isWhite ? SET_BG_COLOR_DARK_BROWN : SET_BG_COLOR_LIGHT_BROWN;
+                String backgroundColor = highlights.contains(here) ? SET_BG_COLOR_YELLOW : defaultBackgroundColor;
+                stringBuilder.append(backgroundColor).append(pieceAt(board, row, col)).append(RESET_BG_COLOR);
             }
 
             stringBuilder.append(rowLabel(row)).append(RESET_TEXT_COLOR).append("\n");

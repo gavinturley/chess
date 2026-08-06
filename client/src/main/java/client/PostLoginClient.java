@@ -93,7 +93,7 @@ public class PostLoginClient {
         ChessGame.TeamColor perspective = color.equals("WHITE") ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
 
         repl.setState(State.IN_GAME);
-        repl.getGamePlayClinet().start(game.gameID(), perspective);
+        repl.getGamePlayClient().start(game.gameID(), perspective);
         return "";
     }
 
@@ -108,7 +108,7 @@ public class PostLoginClient {
         }
 
         repl.setState(State.IN_GAME);
-        repl.getGamePlayClinet().start(game.gameID(), null);
+        repl.getGamePlayClient().start(game.gameID(), null);
         return "";
     }
 
