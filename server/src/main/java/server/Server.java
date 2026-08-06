@@ -1,6 +1,8 @@
 package server;
 
 import dataaccess.*;
+import io.javalin.websocket.WsMessageContext;
+import server.websocket.WebSocketHandler;
 import service.*;
 import io.javalin.*;
 import io.javalin.http.Context;
@@ -42,6 +44,9 @@ public class Server {
         javalin.post("/game", this::createGame);
         javalin.put("/game", this::joinGame);
         javalin.delete("/db", this::clear);
+
+        var webSocketHandler = new WebSocketHandler(authDAO, gameDAO);
+        javalin.ws("/ws", ctx -> webSocketHandler.onMessage(ctx, ctx.message()));
 
         javalin.exception(Exception.class, (e, ctx) -> sendBody(ctx, 500, Map.of("message", "Error: " + e.getMessage())));
     }
