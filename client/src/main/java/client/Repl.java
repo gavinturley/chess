@@ -8,7 +8,7 @@ import static ui.EscapeSequences.SET_TEXT_COLOR_GREEN;
 public class Repl {
     private final PreLoginClient preLoginClient;
     private final PostLoginClient postLoginClient;
-    private final GamePlayClient gamePlayClient;
+    private final WebSocketFacade gamePlayClient;
 
     private State state = State.SIGNED_OUT;
     private String authToken = null;
@@ -18,7 +18,7 @@ public class Repl {
         ServerFacade serverFacade = new ServerFacade(serverURL);
         this.preLoginClient = new PreLoginClient(serverFacade, this);
         this.postLoginClient = new PostLoginClient(serverFacade, this);
-        this.gamePlayClient = new GamePlayClient(serverFacade, this);
+        this.gamePlayClient = new WebSocketFacade(serverFacade, this);
     }
 
     public void run(){
