@@ -40,15 +40,17 @@ public class GamePlayClient {
         switch (message.getServerMessageType()) {
             case LOAD_GAME -> {
                 currentGame = ((LoadGameMessage) message).getGame();
-                System.out.println(redrawChessBoardQuiet());
+                System.out.print("\n" + redrawChessBoardQuiet());
+                repl.printPrompt();
             }
             case NOTIFICATION -> {
-                System.out.println(((NotificationMessage) message).getMessage());
+                System.out.print("\n" + ((NotificationMessage) message).getMessage());
+                repl.printPrompt();
             }
             case ERROR -> {
-                System.out.println(((ErrorMessage) message).getErrorMessage());
+                System.out.print("\n" + ((ErrorMessage) message).getErrorMessage());
+                repl.printPrompt();
             }
-            repl.printPrompt();
         }
     }
 
@@ -122,5 +124,91 @@ public class GamePlayClient {
 
         webSocketFacade.makeMove(repl.getAuthToken(), gameID, new ChessMove(start, end, promotion));
         return "";
+    }
+    
+    private String resign() throws ResponseException {
+        if (playerColor == null) {
+            return "Observers can't resign.\n";
+        }
+        if (gameOver) {
+            return "The game is already over.\n";
+        }
+        
+        System.out.print("Are you sure you want to resign? (y,n) ");
+        String confirm = new java.util.Scanner(System.in).nextLine();
+        if (!confirm.trim().equalsIgnoreCase("y")) {
+            return "Resignation cancelled.\n";
+        }
+        webSocketFacade.resign(repl.getAuthToken(), gameID);
+        gameOver = true;
+        return "You resigned.\n";
+    }
+
+    private String highlightLegalMoves(String... params) throws ResponseException {
+        if (currentGame == null) {
+            return "Board not loaded yet.\n";
+        }
+        if (params.length != 1) {
+            return "Expected: highlight <SQUARE> (e.g. highlight b3\n";
+        }
+
+        ChessPosition position = parsePosition(params[0]);
+        if (position == null) {
+            return "Invalid square. Use chess notation like b3.\n";
+        }
+
+        var validMoves = currentGame.validMoves(position);
+        if (validMoves == null || validMoves.isEmpty()) {
+            return "No legal moves for that square.\n" + BoardPrinter.drawBoard(currentGame.getBoard(), perspective);
+        }
+
+        List<ChessPosition> highlights = new ArrayList<>();
+        highlights.add(position);
+        for (ChessMove move : validMoves) {
+            highlights.add(move.getEndPosition());
+        }
+
+        ChessGame.TeamColor perspective = (playerColor != null) ? playerColor : ChessGame.TeamColor.WHITE;
+        return BoardPrinter.drawBoard(currentGame.getBoard(), perspective, highlights);
+    }
+
+    private ChessPosition parsePosition(String tile) {
+        if (tile.length() != 2) {
+            return null;
+        }
+        char colChar = Character.toLowerCase(tile.charAt(0));
+        char rowChar = tile.charAt(1);
+        if (!checkBounds(colChar, rowChar)){
+            return null;
+        }
+        int col = colChar - 'a' + 1;
+        int row = rowChar - '0';
+        return new ChessPosition(row, col);
+    }
+
+    private ChessPiece.PieceType parsePromotion(String text) {
+        return switch (text.toLowerCase()) {
+            case "queen" -> ChessPiece.PieceType.QUEEN;
+            case "rook" -> ChessPiece.PieceType.ROOK;
+            case "bishop" -> ChessPiece.PieceType.BISHOP;
+            case "knight" -> ChessPiece.PieceType.KNIGHT;
+            default -> null;
+        };
+    }
+
+    private boolean checkBounds(char colChar, char rowChar) {
+        return colChar < 'a' || colChar > 'h' || rowChar < '1' || rowChar > '8';
+    }
+
+    private String help() {
+        return """
+                Commands:
+                  redraw - redraws the chess board
+                  leave - removes the user from the game
+                  move <FROM> <TO> [PROMOTION] - make a move (e.g. move e2 e4)
+                  resign - confirms input then forfeits the game
+                  highlight <CHESS PIECE POSITION> - highlights legal moves for a piece (e.g. highlight b3)
+                  help - display this help text
+                """;
     }
 }
