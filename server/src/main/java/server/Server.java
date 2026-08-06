@@ -46,7 +46,11 @@ public class Server {
         javalin.delete("/db", this::clear);
 
         var webSocketHandler = new WebSocketHandler(authDAO, gameDAO);
-        javalin.ws("/ws", ctx -> webSocketHandler.onMessage(ctx, ctx.message()));
+        javalin.ws("/ws", ws -> {
+            ws.onMessage(ctx -> {
+                webSocketHandler.onMessage(ctx, ctx.message());
+            });
+        });
 
         javalin.exception(Exception.class, (e, ctx) -> sendBody(ctx, 500, Map.of("message", "Error: " + e.getMessage())));
     }

@@ -8,7 +8,7 @@ import static ui.EscapeSequences.SET_TEXT_COLOR_GREEN;
 public class Repl {
     private final PreLoginClient preLoginClient;
     private final PostLoginClient postLoginClient;
-    private final WebSocketFacade gamePlayClient;
+    private final GamePlayClient gamePlayClient;
 
     private State state = State.SIGNED_OUT;
     private String authToken = null;
