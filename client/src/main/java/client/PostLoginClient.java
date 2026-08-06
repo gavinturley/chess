@@ -92,8 +92,9 @@ public class PostLoginClient {
         serverFacade.joinGame(repl.getAuthToken(), color, game.gameID());
         ChessGame.TeamColor perspective = color.equals("WHITE") ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
 
-        return String.format("Joined game '%s' as %s.%n%n", game.gameName(), color)
-                + BoardPrinter.drawBoard(new ChessGame().getBoard(), perspective);
+        repl.setState(State.IN_GAME);
+        repl.getGamePlayClinet().start(game.gameID(), perspective);
+        return "";
     }
 
     private String observeGame(String... params) throws ResponseException {
@@ -106,8 +107,9 @@ public class PostLoginClient {
             return "Error: no such game number. Use 'list' to see available games.";
         }
 
-        return String.format("Observing game '%s'.%n%n", game.gameName())
-                + BoardPrinter.drawBoard(new ChessGame().getBoard(), ChessGame.TeamColor.WHITE);
+        repl.setState(State.IN_GAME);
+        repl.getGamePlayClinet().start(game.gameID(), null);
+        return "";
     }
 
     private GameData getGame(String numberString) {

@@ -18,7 +18,7 @@ public class Repl {
         ServerFacade serverFacade = new ServerFacade(serverURL);
         this.preLoginClient = new PreLoginClient(serverFacade, this);
         this.postLoginClient = new PostLoginClient(serverFacade, this);
-        this.gamePlayClient = new WebSocketFacade(serverFacade, this);
+        this.gamePlayClient = new GamePlayClient(serverFacade, this);
     }
 
     public void run(){
@@ -31,8 +31,11 @@ public class Repl {
             printPrompt();
             String line = scanner.nextLine();
             try {
-                result = state == State.SIGNED_OUT ? preLoginClient.eval(line) : postLoginClient.eval(line);
-
+                result = switch (state) {
+                    case SIGNED_OUT -> preLoginClient.eval(line);
+                    case SIGNED_IN -> postLoginClient.eval(line);
+                    case IN_GAME -> gamePlayClient.eval(line);
+                };
                 System.out.print(result);
             } catch (Throwable exception) {
                 System.out.print("Error: " + exception.getMessage());
@@ -42,8 +45,16 @@ public class Repl {
     }
 
     public void printPrompt(){
-        String label = state == State.SIGNED_OUT ? "SIGNED_OUT" : "SIGNED_IN";
+        String label = switch (state) {
+            case SIGNED_OUT -> "SIGNED_OUT";
+            case SIGNED_IN -> "SIGNED_IN";
+            case IN_GAME -> "IN_GAME";
+        };
         System.out.print("\n" + RESET_TEXT_COLOR + "[" + label + "] >>> ");
+    }
+
+    public GamePlayClient getGamePlayClient() {
+        return gamePlayClient;
     }
 
     public String getUsername() {
