@@ -30,8 +30,10 @@ public class BoardPrinter {
             for (int col = startCol; whitePerspective ? col <= endCol: col >= endCol; col += colStep){
                 ChessPosition here = new ChessPosition(row, col);
                 boolean isWhite = (row + col) % 2 == 0;
-                String defaultBackgroundColor = isWhite ? SET_BG_COLOR_DARK_BROWN : SET_BG_COLOR_LIGHT_BROWN;
-                String backgroundColor = highlights.contains(here) ? SET_BG_COLOR_YELLOW : defaultBackgroundColor;
+                String backgroundColor = isWhite ? SET_BG_COLOR_DARK_BROWN : SET_BG_COLOR_LIGHT_BROWN;
+                if (highlights != null && highlights.contains(here)) {
+                    backgroundColor = SET_BG_COLOR_YELLOW;
+                }
                 stringBuilder.append(backgroundColor).append(pieceAt(board, row, col)).append(RESET_BG_COLOR);
             }
 

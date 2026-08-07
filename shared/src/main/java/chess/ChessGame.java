@@ -84,10 +84,10 @@ public class ChessGame {
         boolean kingSideAllowed = (color == TeamColor.WHITE) ? gameBoard.isWhiteKingSideCastle() : gameBoard.isBlackKingSideCastle();
         boolean queenSideAllowed = (color == TeamColor.WHITE) ? gameBoard.isWhiteQueenSideCastle() : gameBoard.isBlackQueenSideCastle();
 
-        if (kingSideAllowed && squaresEmpty(row, 6, 7) && !anySquareAttacked(color, row, 6, 7)) {
+        if (kingSideAllowed && squaresEmpty(row, 6, 7) && anySquareAttacked(color, row, 6, 7)) {
             moves.add(new ChessMove(kingPosition, new ChessPosition(row, 7), null));
         }
-        if (queenSideAllowed && squaresEmpty(row, 2, 3, 4) && ! anySquareAttacked(color, row, 3, 4)) {
+        if (queenSideAllowed && squaresEmpty(row, 2, 3, 4) && anySquareAttacked(color, row, 3, 4)) {
             moves.add(new ChessMove(kingPosition, new ChessPosition(row, 3), null));
         }
     }
@@ -104,10 +104,10 @@ public class ChessGame {
     private boolean anySquareAttacked(TeamColor defendingColor, int row, int... cols) {
         for (int col : cols) {
             if (isSquareAttacked(new ChessPosition(row, col), defendingColor)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private boolean isSquareAttacked(ChessPosition square, TeamColor defendingColor) {
@@ -171,7 +171,7 @@ public class ChessGame {
                 && move.getStartPosition().getColumn() != move.getEndPosition().getColumn()
                 && gameBoard.getPiece(move.getEndPosition()) == null;
 
-        boolean isCastle = movingPiece.getPieceType() == ChessPiece.PieceType.ROOK
+        boolean isCastle = movingPiece.getPieceType() == ChessPiece.PieceType.KING
                 && Math.abs(move.getEndPosition().getColumn() - move.getStartPosition().getColumn()) == 2;
 
         updateCastlingAllowance(move, movingPiece);

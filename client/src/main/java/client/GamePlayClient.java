@@ -179,7 +179,7 @@ public class GamePlayClient {
         }
         char colChar = Character.toLowerCase(tile.charAt(0));
         char rowChar = tile.charAt(1);
-        if (!checkBounds(colChar, rowChar)){
+        if (isOutOfBounds(colChar, rowChar)){
             return null;
         }
         int col = colChar - 'a' + 1;
@@ -197,7 +197,7 @@ public class GamePlayClient {
         };
     }
 
-    private boolean checkBounds(char colChar, char rowChar) {
+    private boolean isOutOfBounds(char colChar, char rowChar) {
         return colChar < 'a' || colChar > 'h' || rowChar < '1' || rowChar > '8';
     }
 
