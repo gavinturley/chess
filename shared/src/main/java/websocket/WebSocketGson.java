@@ -7,13 +7,14 @@ import java.lang.reflect.Type;
 
 public class WebSocketGson {
     public static Gson create() {
+        Gson plain = new Gson();
         return new GsonBuilder()
                 .registerTypeAdapter(UserGameCommand.class, (JsonDeserializer<UserGameCommand>) (el, type, ctx) -> {
                     String commandType = el.getAsJsonObject().get("commandType").getAsString();
                     if (UserGameCommand.CommandType.valueOf(commandType) == UserGameCommand.CommandType.MAKE_MOVE) {
                         return ctx.deserialize(el, MakeMoveCommand.class);
                     } else {
-                        return ctx.deserialize(el, UserGameCommand.class);
+                        return plain.fromJson(el, UserGameCommand.class);
                     }
                 })
                 .registerTypeAdapter(ServerMessage.class, (JsonDeserializer<ServerMessage>) (el, type, ctx) -> {

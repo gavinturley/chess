@@ -20,8 +20,8 @@ public class WebSocketHandler {
     }
 
     public void onMessage(WsContext context, String message) {
-        UserGameCommand command = gson.fromJson(message, UserGameCommand.class);
         try {
+            UserGameCommand command = gson.fromJson(message, UserGameCommand.class);
             switch (command.getCommandType()) {
                 case CONNECT -> handleConnect(context, command);
                 case MAKE_MOVE -> handleMakeMove(context, (MakeMoveCommand) gson.fromJson(message, MakeMoveCommand.class));
