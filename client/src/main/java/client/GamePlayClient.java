@@ -125,7 +125,7 @@ public class GamePlayClient {
         ChessBoard boardCopy = currentGame.getBoard().copy();
         webSocketFacade.makeMove(repl.getAuthToken(), gameID, new ChessMove(start, end, promotion));
         if (currentGame.getBoard().equals(boardCopy)){
-            return "Invalid move, board not changed";
+            return "Invalid move, board not changed.\n";
         }
 
         return "";
