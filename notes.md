@@ -12,8 +12,7 @@ You can use the following commands to build, test, package, and run your code.
 | `mvn -pl shared test`      | Run all the shared tests                    |
 | `mvn -pl client exec:java` | Build and run the client `Main`             |
 | `mvn -pl server exec:java` | Build and run the server `Main`             |
-`mvn test -pl client -am -f pom.xml`
-`mvn test -pl client`
+`mvn clean test`
 `mvn clean compile`
 
 The Java String class has a bunch of methods that help manipulate strings. Here is a sampling of some of the more commonly used ones.

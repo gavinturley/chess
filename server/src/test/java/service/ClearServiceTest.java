@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ClearServiceTest {
     @Test
     public void clearRemovesAllData() throws Exception {
-        var userDAO = new SqlUserDAO();
-        var authDAO = new SqlAuthDAO();
-        var gameDAO = new SqlGameDAO();
+        var userDAO = new MemoryUserDAO();
+        var authDAO = new MemoryAuthDAO();
+        var gameDAO = new MemoryGameDAO();
 
         userDAO.createUser(new UserData("gavin", "password", "example@email.com"));
 

@@ -84,12 +84,17 @@ public class ChessGame {
         boolean kingSideAllowed = (color == TeamColor.WHITE) ? gameBoard.isWhiteKingSideCastle() : gameBoard.isBlackKingSideCastle();
         boolean queenSideAllowed = (color == TeamColor.WHITE) ? gameBoard.isWhiteQueenSideCastle() : gameBoard.isBlackQueenSideCastle();
 
-        if (kingSideAllowed && squaresEmpty(row, 6, 7) && anySquareAttacked(color, row, 6, 7)) {
+        if (kingSideAllowed && hasRookAt(row, 8, color) && squaresEmpty(row, 6, 7) && anySquareAttacked(color, row, 6, 7)) {
             moves.add(new ChessMove(kingPosition, new ChessPosition(row, 7), null));
         }
-        if (queenSideAllowed && squaresEmpty(row, 2, 3, 4) && anySquareAttacked(color, row, 3, 4)) {
+        if (queenSideAllowed && hasRookAt(row, 1, color) && squaresEmpty(row, 2, 3, 4) && anySquareAttacked(color, row, 3, 4)) {
             moves.add(new ChessMove(kingPosition, new ChessPosition(row, 3), null));
         }
+    }
+
+    private boolean hasRookAt(int row, int col, TeamColor color) {
+        ChessPiece piece = gameBoard.getPiece(new ChessPosition(row, col));
+        return piece != null && piece.getPieceType() == ChessPiece.PieceType.ROOK && piece.getTeamColor() == color;
     }
 
     private boolean squaresEmpty(int row, int... cols){
