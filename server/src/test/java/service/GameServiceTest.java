@@ -16,8 +16,8 @@ public class GameServiceTest {
 
     @BeforeEach
     public void setup() throws Exception {
-        gameDAO = new MemoryGameDAO();
-        authDAO = new MemoryAuthDAO();
+        gameDAO = new SqlGameDAO();
+        authDAO = new SqlAuthDAO();
         gameService = new GameService(gameDAO, authDAO);
 
         authToken = "testToken";
