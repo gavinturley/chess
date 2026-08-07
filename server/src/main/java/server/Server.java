@@ -21,16 +21,7 @@ public class Server {
     /* Server logic and memory management */
     public Server() {
         javalin = Javalin.create()
-                .get("/echo/{msg}", ctx -> ctx.result("HTTP response: " + ctx.pathParam("msg")))
-                .ws("/ws", ws -> {
-                    ws.onConnect(ctx -> {
-                        ctx.enableAutomaticPings();
-                        System.out.println("Websocket connected");
-                    });
-                    ws.onMessage(ctx -> ctx.send("WebSocket response:" + ctx.message()));
-                    ws.onClose(_ -> System.out.println("Websocket closed"));
-                })
-                .start(8080);
+                .get("/echo/{msg}", ctx -> ctx.result("HTTP response: " + ctx.pathParam("msg")));
 
         UserDAO userDAO;
         GameDAO gameDAO;
@@ -57,9 +48,14 @@ public class Server {
 
         var webSocketHandler = new WebSocketHandler(authDAO, gameDAO);
         javalin.ws("/ws", ws -> {
+            ws.onConnect(ctx -> {
+                ctx.enableAutomaticPings();
+                System.out.println("Websocket connected");
+            });
             ws.onMessage(ctx -> {
                 webSocketHandler.onMessage(ctx, ctx.message());
             });
+            ws.onClose(_ -> System.out.println("Websocket closed"));
         });
 
         javalin.exception(Exception.class, (e, ctx) -> sendBody(ctx, 500, Map.of("message", "Error: " + e.getMessage())));

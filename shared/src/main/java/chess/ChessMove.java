@@ -39,11 +39,23 @@ public class ChessMove {
 
     @Override
     public String toString() {
-        return "ChessMove{" +
-                "start=" + startPosition +
-                ", end=" + endPosition +
-                ", promotion=" + promotionPiece +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder("move ");
+        stringBuilder.append(columnToLetters(startPosition.getColumn()));
+        stringBuilder.append(startPosition.getRow());
+        stringBuilder.append(" to ");
+        stringBuilder.append(columnToLetters(endPosition.getColumn()));
+        stringBuilder.append(endPosition.getRow());
+
+        if (promotionPiece != null) {
+            stringBuilder.append(" ");
+            stringBuilder.append(promotionPiece.toString().toLowerCase());
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private String columnToLetters(int column){
+        return String.valueOf((char) ('a' + column - 1));
     }
 
     public ChessPosition getStartPosition() {
