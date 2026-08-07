@@ -20,7 +20,17 @@ public class Server {
 
     /* Server logic and memory management */
     public Server() {
-        javalin = Javalin.create(config -> config.staticFiles.add("web"));
+        javalin = Javalin.create()
+                .get("/echo/{msg}", ctx -> ctx.result("HTTP response: " + ctx.pathParam("msg")))
+                .ws("/ws", ws -> {
+                    ws.onConnect(ctx -> {
+                        ctx.enableAutomaticPings();
+                        System.out.println("Websocket connected");
+                    });
+                    ws.onMessage(ctx -> ctx.send("WebSocket response:" + ctx.message()));
+                    ws.onClose(_ -> System.out.println("Websocket closed"));
+                })
+                .start(8080);
 
         UserDAO userDAO;
         GameDAO gameDAO;

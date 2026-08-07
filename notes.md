@@ -15,6 +15,9 @@ You can use the following commands to build, test, package, and run your code.
 `mvn clean test`
 `mvn clean compile`
 
+`mvn -pl shared install -f pom.xml`
+`mvn -pl server exec:java -f pom.xml`
+
 The Java String class has a bunch of methods that help manipulate strings. Here is a sampling of some of the more commonly used ones.
 
 Method |	Purpose
