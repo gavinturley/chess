@@ -27,11 +27,4 @@ public class ConnectionManager {
             }
         }
     }
-
-    public void sendTo(String authToken, ServerMessage message) {
-        var connection = connections.get(authToken);
-        if (connection != null && connection.session().session.isOpen()) {
-            connection.session().send(gson.toJson(message));
-        }
-    }
 }
