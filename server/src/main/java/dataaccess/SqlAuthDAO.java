@@ -68,8 +68,7 @@ public class SqlAuthDAO implements AuthDAO{
         String statement = """
                     CREATE TABLE IF NOT EXISTS auth (
                     authToken VARCHAR(255) NOT NULL PRIMARY KEY,
-                    username VARCHAR(255) NOT NULL,
-                    FOREIGN KEY (username) REFERENCES user(username)
+                    username VARCHAR(255) NOT NULL
                     );
                     """;
         try (var conn = DatabaseManager.getConnection()) {
