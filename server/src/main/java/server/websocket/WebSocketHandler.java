@@ -147,6 +147,11 @@ public class WebSocketHandler {
             return;
         }
 
+        if (gameOverGames.contains(command.getGameID())) {
+            context.send(gson.toJson(new ErrorMessage("Error: game already over")));
+            return;
+        }
+
         boolean isPlayer = auth.username().equals(game.whiteUsername()) || auth.username().equals(game.blackUsername());
         if (!isPlayer) {
             context.send(gson.toJson(new ErrorMessage("Error: observers cannot resign")));
